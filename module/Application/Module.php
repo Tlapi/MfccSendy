@@ -48,4 +48,25 @@ class Module
 
     }
 
+    public function getServiceConfig()
+    {
+    	return array(
+    			'invokables' => array(
+    			),
+    			'factories' => array(
+    					'mandrill' => function ($sm) {
+    						$config  = $sm->get('config');
+    						$mandrill = new \Mandrill($config['mandrill']['api_key']);
+    						curl_setopt($mandrill->ch, CURLOPT_SSL_VERIFYPEER, false);
+    						return $mandrill;
+    					},
+    					'webhooks' => function ($sm) {
+    						$webhooks = new \Application\Service\Webhooks();
+    						$webhooks->setMandrill($sm->get('mandrill'));
+    						return $webhooks;
+    					},
+    			),
+    	);
+    }
+
 }

@@ -36,6 +36,27 @@
 	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['all_time'])?>
 
 
+	<h2>Webhooks status</h2>
+
+	<?php if($this->webhooks){?>
+		<div class="alert alert-success">
+			Webhook is set up.
+		</div>
+	<?php } else {?>
+		<div class="alert alert-error">
+			Webhooks won't work on localhost!
+		</div>
+		<div class="alert alert-block">
+			<h4>Warning!</h4>
+			Webhook is not set in Mandrill! You wont get any statistics!
+			<br />
+			<a href="<?php echo $this->url('hooks/set')?>" class="btn btn-primary">Set webhook now!</a>
+		</div>
+	<?php }?>
+
+	<br />
+	<strong>Webhooks formatting help: <a href="http://help.mandrill.com/entries/24466132-Webhook-Format">http://help.mandrill.com/entries/24466132-Webhook-Format</a></strong>
+
     <h2>Total subscribers //todo</h2>
 
     <?php

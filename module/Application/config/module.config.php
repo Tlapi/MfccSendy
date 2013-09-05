@@ -303,6 +303,32 @@ return array(
         			),
         			'may_terminate' => true,
         	),
+        	// Mandrill webhooks
+        	'hooks' => array(
+        			'type'    => 'Literal',
+        			'options' => array(
+        					'route'    => '/hooks',
+        					'defaults' => array(
+        							'__NAMESPACE__' => 'Application\Controller',
+        							'controller'    => 'Hooks',
+        							'action'        => 'index',
+        					),
+        			),
+        			'may_terminate' => true,
+        			'child_routes' => array(
+	        			'set' => array(
+	        					'type'    => 'Segment',
+	        					'options' => array(
+	        							'route'    => '/set',
+	        							'defaults' => array(
+	        									'__NAMESPACE__' => 'Application\Controller',
+	        									'controller'    => 'Hooks',
+	        									'action'        => 'set',
+	        							),
+	        					),
+	        			),
+        			),
+        	),
         ),
     ),
     'service_manager' => array(
@@ -331,6 +357,7 @@ return array(
             'Application\Controller\Lists' => 'Application\Controller\ListsController',
             'Application\Controller\Campaigns' => 'Application\Controller\CampaignsController',
             'Application\Controller\Settings' => 'Application\Controller\SettingsController',
+            'Application\Controller\Hooks' => 'Application\Controller\HooksController',
         ),
     ),
     'view_manager' => array(

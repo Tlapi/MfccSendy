@@ -12,21 +12,23 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class HooksController extends AbstractActionController
 {
     public function indexAction()
     {
-    	// TODO move to factory
-    	$mandrill = $this->getServiceLocator()->get('mandrill');
-    	$webhooks = $this->getServiceLocator()->get('webhooks');
-
-    	$webhookStatus = $webhooks->checkWebhookStatus();
-
-    	$mandrillInfo = $mandrill->users->info();
 
         return new ViewModel(array(
-        	'mandrillInfo' => $mandrillInfo,
-        	'webhookStatus' => $webhookStatus,
+
         ));
+    }
+
+    public function setAction()
+    {
+    	// TODO move to factory
+    	$webhooks = $this->getServiceLocator()->get('webhooks');
+
+    	$webhooks->addWebhook();
+
+		$this->redirect()->toRoute('home');
     }
 }
