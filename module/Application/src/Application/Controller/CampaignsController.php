@@ -28,6 +28,23 @@ class CampaignsController extends AbstractActionController
         ));
     }
 
+    public function showAction()
+    {
+		// TODO move to factory
+    	$id = (int) $this->params()->fromRoute('id', 0);
+
+    	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
+    	$campaign = $campaigns->find($id);
+
+    	$campaignStats = $this->getServiceLocator()->get('campaignStats');
+    	$stats = $campaignStats->getStats($campaign);
+
+        return new ViewModel(array(
+			'campaign' => $campaign,
+			'stats' => $stats,
+        ));
+    }
+
     public function addAction()
     {
     	// TODO move to factory
@@ -67,6 +84,7 @@ class CampaignsController extends AbstractActionController
 
     public function sendToAction()
     {
+    	// TODO move to factory
     	$id = (int) $this->params()->fromRoute('id', 0);
 
     	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
@@ -94,6 +112,42 @@ class CampaignsController extends AbstractActionController
     	return new ViewModel(array(
     			'form' => $form
     	));
+    }
+
+    public function duplicateAction()
+    {
+    	// TODO move to factory
+    	$id = (int) $this->params()->fromRoute('id', 0);
+
+    	// Get campaigns repo
+    	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
+    	$campaign = $campaigns->find($id);
+
+    	$newCampaign = new \Application\Entity\Campaign();
+    	$newCampaign->exchangeArray($campaign->getArrayCopy());
+    	$newCampaign->brand = $campaign->brand;
+
+    	$this->getEntityManager()->persist($newCampaign);
+    	$this->getEntityManager()->flush();
+
+    	$this->redirect()->toRoute('brands/show', array('id' => $campaign->brand->id));
+    }
+
+    public function deleteAction()
+    {
+    	// TODO move to factory
+    	$id = (int) $this->params()->fromRoute('id', 0);
+
+    	// Get campaigns repo
+    	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
+    	$campaign = $campaigns->find($id);
+
+    	$brand_id = $campaign->brand->id;
+
+    	$this->getEntityManager()->remove($campaign);
+    	$this->getEntityManager()->flush();
+
+    	$this->redirect()->toRoute('brands/show', array('id' => $brand_id));
     }
 
     public function setEntityManager(EntityManager $em)

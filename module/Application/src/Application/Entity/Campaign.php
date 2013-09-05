@@ -88,6 +88,17 @@ class Campaign
     private $brand;
 
     /**
+     * @ORM\Column(type="integer", options={"default" = 0});
+     * @var int
+     * 0 - draft
+     * 1 - preparing
+     * 2 - sending
+     * 3 - sent
+     * 4 - error
+     */
+    protected $status;
+
+    /**
      * Magic getter to expose protected properties.
      *
      * @param DateTime $property
@@ -122,5 +133,6 @@ class Campaign
     	$this->reply_to = (isset($data['reply_to']))     ? $data['reply_to']     : null;
     	$this->plain_text = (isset($data['plain_text']))     ? $data['plain_text']     : null;
     	$this->html_text = (isset($data['html_text']))     ? $data['html_text']     : null;
+    	$this->status = (isset($data['status']))     ? $data['status']     : null;
     }
 }

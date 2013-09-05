@@ -22,25 +22,26 @@
 			<?php echo $campaign->id?>
 		</td>
 		<td>
+			<?php echo $this->campaignStatus($campaign->status)?>
 			<a href="<?php echo $this->url('campaigns/show', array('id' => $campaign->id))?>"><?php echo $campaign->title?></a>
 		</td>
 		<td>
-
+			<?php if($campaign->status==0){?>-<?php }?>
 		</td>
 		<td>
-
+			<?php if($campaign->status==0){?>-<?php }?>
 		</td>
 		<td>
-
+			<?php if($campaign->status==0){?>-<?php }?>
 		</td>
 		<td>
-
+			<?php if($campaign->status==0){?>-<?php }?>
 		</td>
 		<td>
-			<a href="<?php echo $this->url('campaigns/duplicate', array('id' => $campaign->id))?>">Duplicate (todo)</a>
+			<a href="<?php echo $this->url('campaigns/duplicate', array('id' => $campaign->id))?>">Duplicate</a>
 		</td>
 		<td>
-			<a href="<?php echo $this->url('campaigns/delete', array('id' => $campaign->id))?>">Delete (todo)</a>
+			<a href="<?php echo $this->url('campaigns/delete', array('id' => $campaign->id))?>">Delete</a>
 		</td>
 	</tr>
 	<?php }?>

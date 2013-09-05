@@ -42,6 +42,7 @@ class Module
     	return array(
     			'invokables' => array(
     					'userStatus'       => 'Application\View\Helper\UserStatus',
+    					'campaignStatus'       => 'Application\View\Helper\CampaignStatus',
     					'printMandrillStats'       => 'Application\View\Helper\PrintMandrillStats',
     			)
     	);
@@ -64,6 +65,11 @@ class Module
     						$webhooks = new \Application\Service\Webhooks();
     						$webhooks->setMandrill($sm->get('mandrill'));
     						return $webhooks;
+    					},
+    					'campaignStats' => function ($sm) {
+    						$campaignStats = new \Application\Service\CampaignStats();
+    						$campaignStats->setMandrill($sm->get('mandrill'));
+    						return $campaignStats;
     					},
     			),
     	);

@@ -36,6 +36,7 @@ class ListsToSubscribers
     /**
      * @ORM\Column(type="integer", options={"default" = 0});
      * @var int
+     * 0 - unknown
      * 1 - subscribed
      * 2 - unsubsribed
      * 3 - soft bounced

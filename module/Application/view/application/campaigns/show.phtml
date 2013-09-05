@@ -1,0 +1,47 @@
+<div class="well">
+	Note: this is demo report for campaign with tag: <strong>pardal</strong>
+</div>
+
+<h1>Campaign report <?php echo $this->campaignStatus($this->campaign->status)?></h1>
+
+Sent to <span class="label"><?php echo $this->stats['info']['sent']?> subscribers</span>
+<br />
+Reputation for this campaign: <?php echo $this->stats['info']['reputation']?>
+
+<br /><br />
+
+<div class="well">
+	<span class="label"><?php echo $this->stats['info']['opens']?></span> opened (<?php echo $this->stats['info']['unique_opens']?> unique)
+	<br /><br />
+	<span class="label"><?php echo $this->stats['info']['sent'] - $this->stats['info']['unique_opens']?></span> not opened
+	<br /><br />
+	<span class="label"><?php echo $this->stats['info']['clicks']?></span> clicked a link (<?php echo $this->stats['info']['unique_clicks']?> unique)
+	<br /><br />
+	<span class="label"></span> unsubscribed (relies on webhooks)
+	<br /><br />
+	<span class="label"><?php echo $this->stats['info']['hard_bounces'] + $this->stats['info']['soft_bounces']?></span> bounced (<?php echo $this->stats['info']['hard_bounces']?> hard, <?php echo $this->stats['info']['soft_bounces']?> soft)
+	<br /><br />
+	<span class="label"><?php echo $this->stats['info']['complaints']?></span> marked as spam
+</div>
+
+<br /><br />
+
+<strong>Relies on webhooks:</strong>
+
+<h4>Link activity</h4>
+
+<h4>Last 10 opened</h4>
+
+<h4>Last 10 unsubscribed</h4>
+
+<h4>Last 10 bounced</h4>
+
+<h4>Last 10 marked as spam</h4>
+
+<h4>Map</h4>
+
+<h4>Countries</h4>
+
+<h4>Operation systems</h4>
+
+<h4>Clients</h4>
