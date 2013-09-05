@@ -17,7 +17,8 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
     	// TODO move to factory
-    	$mandrill = new \Mandrill('SrSfJZOUdAmZEpoXMGz4gg');
+    	$config  = $this->getServiceLocator()->get('config');
+    	$mandrill = new \Mandrill($config['mandrill']['api_key']);
     	curl_setopt($mandrill->ch, CURLOPT_SSL_VERIFYPEER, false);
     	$mandrillInfo = $mandrill->users->info();
 

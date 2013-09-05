@@ -17,11 +17,8 @@ class SettingsController extends AbstractActionController
     public function indexAction()
     {
 
-    	// TODO move to factory
-    	$mandrill = new \Mandrill('SlcPQn3V1Ooa8grE5j9Liw');
-
         return new ViewModel(array(
-        	'mandrill' => $mandrill
+
         ));
     }
 }
