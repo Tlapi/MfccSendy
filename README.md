@@ -15,3 +15,7 @@ php composer.phar install
 ```sh
 php vendor/bin/doctrine orm:schema-tool:update --force
 ```
+
+Set up db connection ``doctrineconnection.local.php.dist``
+
+Insert ``data\mfsendy.sql``
