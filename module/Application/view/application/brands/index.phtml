@@ -1,0 +1,28 @@
+<h1>List brands</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<td>name</td>
+			<td>edit</td>
+			<td>delete</td>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach($this->brands as $brand){?>
+	<tr>
+		<td>
+			<a href="<?php echo $this->url('brands/show', array('id' => $brand->id))?>"><?php echo $brand->name?></a>
+		</td>
+		<td>
+			<a href="<?php echo $this->url('brands/edit', array('id' => $brand->id))?>">Edit</a>
+		</td>
+		<td>
+			<a href="<?php echo $this->url('brands/delete', array('id' => $brand->id))?>">Delete</a>
+		</td>
+	</tr>
+	<?php }?>
+	</tbody>
+</table>
+
+<a href="<?php echo $this->url('brands/add')?>" class="btn btn-primary">Add brand</a>

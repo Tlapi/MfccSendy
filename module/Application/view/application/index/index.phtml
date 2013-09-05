@@ -1,0 +1,258 @@
+<div class="hero-unit">
+    <h1><?php echo $this->translate('Dashboard') ?></h1>
+
+    <h2>Your Mandrill account stats</h2>
+
+    <h4>Basic info</h4>
+    <table class="table">
+  		<tbody>
+  			<tr>
+  				<td><b>Reputation</b></td>
+  				<td><?php echo $this->mandrillInfo['reputation']?></td>
+  				<td><b>Hourly quota</b></td>
+  				<td><?php echo $this->mandrillInfo['hourly_quota']?></td>
+  				<td><b>Backlog</b></td>
+  				<td><?php echo $this->mandrillInfo['backlog']?></td>
+  			</tr>
+  		</tbody>
+	</table>
+
+    <h4>Today stats</h4>
+	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['today'])?>
+
+	<h4>Last 7 days</h4>
+	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['last_7_days'])?>
+
+	<h4>Last 30 days</h4>
+	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['last_30_days'])?>
+
+	<h4>Last 60 days</h4>
+	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['last_60_days'])?>
+
+	<h4>Last 90 days</h4>
+	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['last_90_days'])?>
+
+	<h4>All time</h4>
+	<?php echo $this->printMandrillStats($this->mandrillInfo['stats']['all_time'])?>
+
+
+    <h2>Total subscribers //todo</h2>
+
+    <?php
+    // TODO move this to helper
+    ?>
+	<script src="<?php echo $this->basePath()?>/js/highcharts/highcharts.js"></script>
+
+	<script type="text/javascript">
+		var month=new Array();
+		month[0]="Jan";month[1]="Feb";month[2]="Mar";month[3]="Apr";month[4]="May";month[5]="Jun";month[6]="Jul";month[7]="Aug";month[8]="Sep";month[9]="Oct";month[10]="Nov";month[11]="Dec";
+
+		var chart;
+		$(document).ready(function() {
+			Highcharts.setOptions({
+		        colors: ['#468847', '#B94A48', '#333333']
+		    });
+			chart = new Highcharts.Chart({
+				chart: {
+					renderTo: 'container',
+					type: 'areaspline',
+					marginBottom: 25
+				},
+				title: {
+					text: false
+				},
+				subtitle: {
+					text: false
+				},
+				xAxis: {
+					categories: [
+					month[9]+" 12",month[10]+" 12",month[11]+" 12",month[0]+" 13",month[1]+" 13",month[2]+" 13",month[3]+" 13",month[4]+" 13",month[5]+" 13",month[6]+" 13",month[7]+" 13",month[8]+" 13"						]
+				},
+				yAxis: {
+					title: {
+						text: false
+					},
+					plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				},
+				plotOptions: {
+					line: {
+						stacking: 'normal'
+					},
+					series: {
+		                marker: {
+		                    enabled: false
+		                }
+		            }
+				},
+				tooltip: {
+					formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+							this.x +': '+ this.y;
+					}
+				},
+				legend: {
+					enabled: false
+				},
+				credits: {
+	                enabled: false
+	            },
+				series: [{
+	                name: 'Subscribers',
+	                data: [
+	                0,0,0,0,105894,105896,105896,105956,105961,105967,106030,106043		                ]
+	            }]
+			});
+		});
+	</script>
+
+	<div id="container" style="min-height:200px;margin:0 0 30px 0;"></div>
+
+    <h2>Unsubscribe tendency //todo</h2>
+
+	<script type="text/javascript">
+		var month=new Array();
+		month[0]="Jan";month[1]="Feb";month[2]="Mar";month[3]="Apr";month[4]="May";month[5]="Jun";month[6]="Jul";month[7]="Aug";month[8]="Sep";month[9]="Oct";month[10]="Nov";month[11]="Dec";
+
+		var chart;
+		$(document).ready(function() {
+			Highcharts.setOptions({
+		        colors: ['#884646', '#B94A48', '#333333']
+		    });
+			chart = new Highcharts.Chart({
+				chart: {
+					renderTo: 'container_un',
+					type: 'areaspline',
+					marginBottom: 25
+				},
+				title: {
+					text: false
+				},
+				subtitle: {
+					text: false
+				},
+				xAxis: {
+					categories: [
+					month[9]+" 12",month[10]+" 12",month[11]+" 12",month[0]+" 13",month[1]+" 13",month[2]+" 13",month[3]+" 13",month[4]+" 13",month[5]+" 13",month[6]+" 13",month[7]+" 13",month[8]+" 13"						]
+				},
+				yAxis: {
+					title: {
+						text: false
+					},
+					plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				},
+				plotOptions: {
+					line: {
+						stacking: 'normal'
+					},
+					series: {
+		                marker: {
+		                    enabled: false
+		                }
+		            }
+				},
+				tooltip: {
+					formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+							this.x +': '+ this.y;
+					}
+				},
+				legend: {
+					enabled: false
+				},
+				credits: {
+	                enabled: false
+	            },
+				series: [{
+	                name: 'Subscribers',
+	                data: [
+	                0,0,0,0,105894,105896,105896,105956,105961,105967,106030,106043		                ]
+	            }]
+			});
+		});
+	</script>
+
+	<div id="container_un" style="min-height:200px;margin:0 0 30px 0;"></div>
+
+    <h2>Complain tendency //todo</h2>
+
+	<script type="text/javascript">
+		var month=new Array();
+		month[0]="Jan";month[1]="Feb";month[2]="Mar";month[3]="Apr";month[4]="May";month[5]="Jun";month[6]="Jul";month[7]="Aug";month[8]="Sep";month[9]="Oct";month[10]="Nov";month[11]="Dec";
+
+		var chart;
+		$(document).ready(function() {
+			Highcharts.setOptions({
+		        colors: ['#333333', '#B94A48', '#333333']
+		    });
+			chart = new Highcharts.Chart({
+				chart: {
+					renderTo: 'container_co',
+					type: 'areaspline',
+					marginBottom: 25
+				},
+				title: {
+					text: false
+				},
+				subtitle: {
+					text: false
+				},
+				xAxis: {
+					categories: [
+					month[9]+" 12",month[10]+" 12",month[11]+" 12",month[0]+" 13",month[1]+" 13",month[2]+" 13",month[3]+" 13",month[4]+" 13",month[5]+" 13",month[6]+" 13",month[7]+" 13",month[8]+" 13"						]
+				},
+				yAxis: {
+					title: {
+						text: false
+					},
+					plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				},
+				plotOptions: {
+					line: {
+						stacking: 'normal'
+					},
+					series: {
+		                marker: {
+		                    enabled: false
+		                }
+		            }
+				},
+				tooltip: {
+					formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+							this.x +': '+ this.y;
+					}
+				},
+				legend: {
+					enabled: false
+				},
+				credits: {
+	                enabled: false
+	            },
+				series: [{
+	                name: 'Subscribers',
+	                data: [
+	                0,0,0,0,105894,105896,105896,105956,105961,105967,106030,106043		                ]
+	            }]
+			});
+		});
+	</script>
+
+	<div id="container_co" style="min-height:200px;margin:0 0 30px 0;"></div>
+
+</div>
+
+<div class="row">
+
+</div>
