@@ -183,6 +183,16 @@ class ListsController extends AbstractActionController
     	$this->redirect()->toRoute('lists/show', array('id' => $connection->list->id));
     }
 
+    public function addSubscribersAction()
+    {
+
+    }
+
+    public function removeSubscribersAction()
+    {
+
+    }
+
     public function setEntityManager(EntityManager $em)
     {
     	$this->em = $em;

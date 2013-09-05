@@ -109,6 +109,31 @@ return array(
         											'id' => '[0-9]*',
         									),
         							),
+        							'may_terminate' => true,
+        							'child_routes' => array(
+	        							'add-subscribers' => array(
+	        									'type'    => 'Segment',
+	        									'options' => array(
+	        											'route'    => '/add-subscribers',
+	        											'defaults' => array(
+	        													'__NAMESPACE__' => 'Application\Controller',
+	        													'controller'    => 'Lists',
+	        													'action'        => 'addSubscribers',
+	        											),
+	        									),
+	        							),
+	        							'remove-subscribers' => array(
+	        									'type'    => 'Segment',
+	        									'options' => array(
+	        											'route'    => '/remove-subscribers',
+	        											'defaults' => array(
+	        													'__NAMESPACE__' => 'Application\Controller',
+	        													'controller'    => 'Lists',
+	        													'action'        => 'removeSubscribers',
+	        											),
+	        									),
+	        							),
+									)
         					),
         					'edit' => array(
         							'type'    => 'Segment',

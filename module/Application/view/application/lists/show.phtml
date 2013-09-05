@@ -2,6 +2,11 @@
 
 <h2>List subscribers</h2>
 
+<a href="<?php echo $this->url('lists/show/add-subscribers', array('id' => $this->list->id))?>" class="btn">Add subscribers</a>
+<a href="<?php echo $this->url('lists/show/remove-subscribers', array('id' => $this->list->id))?>" class="btn">Delete subscribers</a>
+
+<br /><br />
+
 <script src="<?php echo $this->basePath()?>/js/highcharts/highcharts.js"></script>
 
 <script type="text/javascript">
