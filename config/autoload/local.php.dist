@@ -23,5 +23,10 @@ return array(
     // ...
 	'mandrill' => array(
 		'api_key' => 'SrSfJZOUdAmZEpoXMGz4gg'
-	)
+	),
+	'pubnub' => array(
+		'subscribe_key' => 'sub-677ba457-b147-11e1-b52f-a7abc5428a24',
+		'publish_key' => 'pub-a6826806-49f8-4f85-9530-d0d38965a12d',
+		'secret_key' => 'sec-NjdkOWVmOTMtMjIyZS00MGQ0LThkMjktYWNhZTY3MDM1MzAx'
+	),
 );
