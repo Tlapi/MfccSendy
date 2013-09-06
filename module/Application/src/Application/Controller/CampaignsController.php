@@ -114,6 +114,7 @@ class CampaignsController extends AbstractActionController
     		if ($form->isValid()) {
 
     			$campaign->recepient_lists = $data['recipients'];
+    			$campaign->status = $campaign::STATUS_SENDING;
     			$this->getEntityManager()->persist($campaign);
     			$this->getEntityManager()->flush();
 

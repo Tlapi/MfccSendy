@@ -13,6 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Campaign
 {
+
+	const STATUS_DRAFT = 0;
+	const STATUS_PREPARING = 1;
+	const STATUS_SENDING = 2;
+	const STATUS_SENT = 3;
+	const STATUS_ERROR = 4;
+
     /**
      * @ORM\Id
 	 * @ORM\Column(type="integer");
