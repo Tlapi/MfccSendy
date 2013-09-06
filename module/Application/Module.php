@@ -77,6 +77,16 @@ class Module
     						$campaignSender->setMandrill($sm->get('mandrill'));
     						return $campaignSender;
     					},
+    					'pubnubService' => function ($sm) {
+    						$config  = $sm->get('config');
+    						$pubnub = new \Pubnub\Pubnub(
+							    $config['pubnub']['publish_key'],  ## PUBLISH_KEY
+							    $config['pubnub']['subscribe_key'],  ## SUBSCRIBE_KEY
+							    $config['pubnub']['secret_key'],      ## SECRET_KEY
+							    false    ## SSL_ON?
+							);
+    						return $pubnub;
+    					},
     			),
     	);
     }

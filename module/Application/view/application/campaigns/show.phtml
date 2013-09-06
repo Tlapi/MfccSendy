@@ -64,3 +64,19 @@ new google.maps.Map(document.getElementById('map-canvas'),
 		mapOptions);
 });
 </script>
+
+<script src=http://cdn.pubnub.com/pubnub-3.5.3.1.min.js ></script>
+<script>(function(){
+
+    var pubnub = PUBNUB.init({ subscribe_key : 'sub-677ba457-b147-11e1-b52f-a7abc5428a24' });
+
+    // LISTEN
+    pubnub.subscribe({
+        channel : "mfcc_sender_event",
+        message : function(m){
+        	var obj = jQuery.parseJSON(m);
+        	console.log(obj);
+        }
+    });
+
+})();</script>

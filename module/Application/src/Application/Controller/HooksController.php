@@ -16,6 +16,19 @@ class HooksController extends AbstractActionController
 {
     public function indexAction()
     {
+    	$pubnub = $this->getServiceLocator()->get('pubnubService');
+
+
+    	$info = $pubnub->publish(array(
+    			'channel' => 'mfcc_sender_event', ## REQUIRED Channel to Send
+    			'message' => json_encode(array(
+    				'somkey' => 'someval'
+    			))
+    	));
+
+    	print_r($info);
+
+    	die('hook');
 
         return new ViewModel(array(
 
