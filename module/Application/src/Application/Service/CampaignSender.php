@@ -68,13 +68,60 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 
 		// SET some recipients
 		//$this->setRecipients($recipients);
-
+		$subscribers = $this->getEntityManager()->getRepository('Application\Entity\Subscriber');
+    	$lists = implode(' ',$this->campaign->recepient_lists);
+    	$last_id=$this->campaign->last_sent_id;
+		$targets = $this->getEntityManager()->createQuery(
+				
+		"SELECT s FROM Application\Entity\Subscriber AS s LEFT JOIN Application\Entity\ListsToSubscribers AS ls WITH s.id=ls.subscriber WHERE ls.list in ($lists) AND s.id>$last_id GROUP BY s.email ORDER BY s.id DESC"
+				)->getResult();
+		
+    	echo 'sending to :'.count($targets);
+		
+    	$to=array();
+    	$count=0;
+    	foreach($targets as $target)
+    	{	array_push($to, array("email"=>$target->email,"name"=>$target->name));
+    		$campaign->last_sent_id=$target->id;
+    		$count++;
+    		// TODO config for max messages
+    		if($count>500)
+    		{	break;
+    		}
+    	}
+    	if($count>0)
+    	{	$this->setRecipients($to);
+    		$_params = array(
+    			"template_name" => "id_".$this->campaign->id, 
+    			"template_content" => $template_content,
+    			"message" => $this->message,
+    			"async" => true,
+   			);
+    		echo "sending $count";
+    	   	$result=$this->mandrill->call('messages/send-template', $_params);
+    	}    		
+    	
+    	echo json_encode($result);
+    	die($result);
+    	
+	}
+	
+	/**
+	 * Send campaign or resume sending
+	 */
+	public function uploadTemplate()
+	{
+		$template=$this->constructTemplate();
+		$this->mandrill->call('templates/add', $template);
+		// SET some recipients
+		//$this->setRecipients($recipients);
+	
 		/*
-		$this->mandrill->messages->send(
-			$this->message,
-			true
-		);*/
-
+			$this->mandrill->messages->send(
+					$this->message,
+					true
+			);*/
+	
 	}
 
 	/**
@@ -82,17 +129,32 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 	 * @return Mandrill message
 	 */
 	public function constructMessage($test = false)
-	{
+	{	/* set in template
 		$this->message['html'] = $this->campaign->html_text;
 		$this->message['text'] = $this->campaign->plain_text;
 		$this->message['subject'] = $this->campaign->subject;
-		$this->message['from_email'] = $this->campaign->from_email;
+		$this->message['from_email'] = $this->campaign->from_email;*/
+		// don't show other recipients
+		$this->message['preserve_recipients'] = false;
 		if($test)
 			$this->message['tags'] = array('campaign_'.$this->campaign->id.'_test');
 		else
 			$this->message['tags'] = array('brand_'.$this->campaign->brand->id, 'campaign_'.$this->campaign->id);
 
 		return $this->message;
+	}
+	
+	public function constructTemplate()
+	{	$template = array("name" => 'id_'.$this->campaign->id,
+					 "from_email" => $this->campaign->from_email,
+					 "from_name" => $this->campaign->from_name,
+					 "subject" => $this->campaign->subject,
+					 "code" => $campaign->html_text,
+					 "text" => $campaign->plain_text,
+					 "publish" => true,
+				);
+		return $template;
+		
 	}
 
 	/**
