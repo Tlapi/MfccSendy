@@ -17,6 +17,14 @@ class CampaignFilter extends InputFilter
 		));
 
 		$this->add(array(
+				'name'       => 'subject',
+				'required'   => true,
+				'filters'   => array(
+						array('name' => 'StringTrim'),
+				),
+		));
+
+		$this->add(array(
 				'name'       => 'from_name',
 				'required'   => true,
 				'filters'   => array(

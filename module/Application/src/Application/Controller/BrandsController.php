@@ -38,8 +38,11 @@ class BrandsController extends AbstractActionController
 
     	$brand = $brands->find($id);
 
+    	$campaignStats = $this->getServiceLocator()->get('campaignStats');
+
         return new ViewModel(array(
-			'brand' => $brand
+			'brand' => $brand,
+			'campaignStats' => $campaignStats,
         ));
     }
 

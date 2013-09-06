@@ -264,7 +264,7 @@ return array(
         									'defaults' => array(
         											'__NAMESPACE__' => 'Application\Controller',
         											'controller'    => 'Campaigns',
-        											'action'        => 'edit',
+        											'action'        => 'add',
         									),
         									'constraints' => array(
         											'id' => '[0-9]*',

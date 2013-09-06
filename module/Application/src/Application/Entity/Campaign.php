@@ -46,6 +46,12 @@ class Campaign
     protected $title;
 
     /**
+     * @ORM\Column(type="string");
+     * @var string
+     */
+    protected $subject;
+
+    /**
      * @ORM\Column(type="text");
      * @var string
      */
@@ -128,6 +134,7 @@ class Campaign
     public function exchangeArray($data)
     {
     	$this->title = (isset($data['title']))     ? $data['title']     : null;
+    	$this->subject = (isset($data['subject']))     ? $data['subject']     : null;
     	$this->from_name = (isset($data['from_name']))     ? $data['from_name']     : null;
     	$this->from_email = (isset($data['from_email']))     ? $data['from_email']     : null;
     	$this->reply_to = (isset($data['reply_to']))     ? $data['reply_to']     : null;

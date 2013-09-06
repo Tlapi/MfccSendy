@@ -2,7 +2,17 @@
 
 <h2>Test send this campaign</h2>
 
-// todo
+<!-- TODO move this form to class -->
+<form method="POST" accept-charset="utf-8" class="form-vertical" id="test-form">
+	<label class="control-label" for="test_email">Test email(s)</label>
+	<div class="control-group">
+		<div class="controls">
+			<input type="text" class="input-xlarge" id="test_email" name="test_email" placeholder="Email addresses, separated by comma">
+		</div>
+	</div>
+
+	<button type="submit" class="btn" id="test-send-btn"><i class="icon icon-envelope-alt"></i> Test send this newsletter</button>
+</form>
 
 <h2>Define recipients</h2>
 
@@ -12,6 +22,11 @@ $form->prepare();
 echo $this->form()->render($form);
 ?>
 
+<b>Recipients: (//todo javascript counter)</b>
+
 <h2>Campaign preview</h2>
 
-// todo show preview
+<blockquote><strong>From</strong> <span class="label"><?php echo $this->campaign->from_name?> &lt;<?php echo $this->campaign->from_email?>&gt;</span></blockquote>
+<blockquote><strong>Subject</strong> <span class="label"><?php echo $this->campaign->subject?></span></blockquote>
+
+// todo show preview (iframe?)

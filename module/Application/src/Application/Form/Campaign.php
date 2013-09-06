@@ -24,6 +24,16 @@ class Campaign extends Form
         ));
 
         $this->add(array(
+            'name' => 'subject',
+            'options' => array(
+                'label' => 'Subject',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'from_name',
             'options' => array(
                 'label' => 'From name',

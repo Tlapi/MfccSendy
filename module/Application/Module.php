@@ -53,7 +53,7 @@ class Module
     {
     	return array(
     			'invokables' => array(
-    					'listsService' => 'Application\Service\Lists'
+    					'listsService' => 'Application\Service\Lists',
     			),
     			'factories' => array(
     					'mandrill' => function ($sm) {
@@ -71,6 +71,11 @@ class Module
     						$campaignStats = new \Application\Service\CampaignStats();
     						$campaignStats->setMandrill($sm->get('mandrill'));
     						return $campaignStats;
+    					},
+    					'campaignSender' => function ($sm) {
+    						$campaignSender = new \Application\Service\CampaignSender();
+    						$campaignSender->setMandrill($sm->get('mandrill'));
+    						return $campaignSender;
     					},
     			),
     	);

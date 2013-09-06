@@ -55,6 +55,9 @@ class CampaignsController extends AbstractActionController
     	$brand = $brands->find($brand_id);
     	// TODO Set defaults from brand
 
+    	// get id if we edit campaign
+    	$id = (int) $this->params()->fromRoute('id', 0);
+
     	$form = new \Application\Form\Campaign();
     	$form->prepareElements();
     	$form->setInputFilter(new \Application\Form\CampaignFilter());
@@ -98,6 +101,15 @@ class CampaignsController extends AbstractActionController
     	if ($request->isPost()){
     		$data = $request->getPost();
 
+    		// TODO move this to its own action
+    		if(isset($data['test_email'])){
+				$emails = explode(',', $data['test_email']);
+				// TODO set Di
+				$campaignSender = $this->getServiceLocator()->get('campaignSender');
+				$campaignSender->setCampaign($campaign);
+				$campaignSender->sendTest($emails);
+    		}
+
     		$form->setData($data);
     		if ($form->isValid()) {
 
@@ -110,7 +122,8 @@ class CampaignsController extends AbstractActionController
     	}
 
     	return new ViewModel(array(
-    			'form' => $form
+    			'campaign' => $campaign,
+    			'form' => $form,
     	));
     }
 

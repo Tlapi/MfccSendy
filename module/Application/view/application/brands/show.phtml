@@ -16,26 +16,31 @@
 		</tr>
 	</thead>
 	<tbody>
-	<?php foreach($this->brand->campaigns as $campaign){?>
+	<?php foreach($this->brand->campaigns as $campaign){
+		if($campaign->status!=0) $stats = $this->campaignStats->getStats($campaign);
+	?>
 	<tr>
 		<td>
 			<?php echo $campaign->id?>
 		</td>
 		<td>
 			<?php echo $this->campaignStatus($campaign->status)?>
-			<a href="<?php echo $this->url('campaigns/show', array('id' => $campaign->id))?>"><?php echo $campaign->title?></a>
+			<a href="<?php echo ($campaign->status==0?$this->url('campaigns/send-to', array('id' => $campaign->id)):$this->url('campaigns/show', array('id' => $campaign->id)))?>"><?php echo $campaign->title?></a>
+			<?php if($campaign->status==0){?>
+				| <a href="#">Edit //todo</a>
+			<?php }?>
 		</td>
 		<td>
-			<?php if($campaign->status==0){?>-<?php }?>
+			<?php echo ($campaign->status==0?'-':'')?>
 		</td>
 		<td>
-			<?php if($campaign->status==0){?>-<?php }?>
+			<?php echo ($campaign->status==0?'-':$stats['info']['sent'])?>
 		</td>
 		<td>
-			<?php if($campaign->status==0){?>-<?php }?>
+			<?php echo ($campaign->status==0?'-':$stats['info']['opens']." / ".$stats['info']['unique_opens'])?>
 		</td>
 		<td>
-			<?php if($campaign->status==0){?>-<?php }?>
+			<?php echo ($campaign->status==0?'-':$stats['info']['clicks']." / ".$stats['info']['unique_clicks'])?>
 		</td>
 		<td>
 			<a href="<?php echo $this->url('campaigns/duplicate', array('id' => $campaign->id))?>">Duplicate</a>

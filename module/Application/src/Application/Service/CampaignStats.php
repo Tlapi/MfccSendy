@@ -20,6 +20,8 @@ class CampaignStats implements ServiceLocatorAwareInterface {
 	 */
 	public function getStats(\Application\Entity\Campaign $campaign) {
 
+		// TODO cache this in future
+
 		$stats = array();
 
 		$stats['info'] = $this->getMandrill()->tags->info('pardal');
