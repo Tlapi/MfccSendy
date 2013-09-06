@@ -354,6 +354,19 @@ return array(
 	        			),
         			),
         	),
+        	// Cron
+        	'cron' => array(
+        			'type'    => 'Literal',
+        			'options' => array(
+        					'route'    => '/cron',
+        					'defaults' => array(
+        							'__NAMESPACE__' => 'Application\Controller',
+        							'controller'    => 'Cron',
+        							'action'        => 'index',
+        					),
+        			),
+        			'may_terminate' => true,
+        	),
         ),
     ),
     'service_manager' => array(
@@ -383,6 +396,7 @@ return array(
             'Application\Controller\Campaigns' => 'Application\Controller\CampaignsController',
             'Application\Controller\Settings' => 'Application\Controller\SettingsController',
             'Application\Controller\Hooks' => 'Application\Controller\HooksController',
+            'Application\Controller\Cron' => 'Application\Controller\CronController',
         ),
     ),
     'view_manager' => array(
