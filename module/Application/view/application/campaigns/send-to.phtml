@@ -2,6 +2,27 @@
 
 <h2>Test send this campaign</h2>
 
+<?php if($this->campaign->tests){?>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<td>Email</td>
+			<td>Opened</td>
+			<td>Clicked</td>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($this->campaign->tests as $testMail){?>
+		<tr>
+			<td><?php echo $testMail->email?></td>
+			<td><?php echo ($testMail->opened?'YES: '.$testMail->opened:'NO')?></td>
+			<td><?php echo ($testMail->clicked?'YES: '.$testMail->clicked:'NO')?></td>
+		</tr>
+		<?php }?>
+	</tbody>
+</table>
+<?php }?>
+
 <!-- TODO move this form to class -->
 <form method="POST" accept-charset="utf-8" class="form-vertical" id="test-form">
 	<label class="control-label" for="test_email">Test email(s)</label>

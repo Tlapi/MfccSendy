@@ -94,6 +94,11 @@ class Campaign
     private $brand;
 
     /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignTests", mappedBy="campaign")
+     */
+    private $tests;
+
+    /**
      * @ORM\Column(type="integer", options={"default" = 0});
      * @var int
      * 0 - draft

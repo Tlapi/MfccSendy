@@ -26,6 +26,11 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 	private $message;
 
 	/**
+	 * @var Doctrine\ORM\EntityManager
+	 */
+	protected $em;
+
+	/**
 	 * Text send campaign
 	 * @param array $emails
 	 */
@@ -43,6 +48,15 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 			$this->message,
 			true
 		);
+
+		foreach($recipients as $recipient){
+			$testMail = new \Application\Entity\CampaignTests();
+			$testMail->email = $recipient['email'];
+			$testMail->campaign = $this->campaign;
+			$this->getEntityManager()->persist($testMail);
+		}
+
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -111,6 +125,18 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 
 	public function getCampaign() {
 		return $this->campaign;
+	}
+
+	public function setEntityManager(EntityManager $em)
+	{
+		$this->em = $em;
+	}
+	public function getEntityManager()
+	{
+		if (null === $this->em) {
+			$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+		}
+		return $this->em;
 	}
 
 }
