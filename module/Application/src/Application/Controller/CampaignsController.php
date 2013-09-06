@@ -72,6 +72,7 @@ class CampaignsController extends AbstractActionController
     		if ($form->isValid()) {
 
     			$newCampaign->brand = $brand;
+    			$newCampaign->status = 0;
 
     			$this->getEntityManager()->persist($newCampaign);
     			$this->getEntityManager()->flush();
