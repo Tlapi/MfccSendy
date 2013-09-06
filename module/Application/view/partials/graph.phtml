@@ -1,0 +1,65 @@
+<script type="text/javascript">
+	var month=new Array();
+	month[0]="Jan";month[1]="Feb";month[2]="Mar";month[3]="Apr";month[4]="May";month[5]="Jun";month[6]="Jul";month[7]="Aug";month[8]="Sep";month[9]="Oct";month[10]="Nov";month[11]="Dec";
+
+	var chart;
+	$(document).ready(function() {
+		Highcharts.setOptions({
+	        colors: [<?php echo join(',', $this->colors)?>]
+	    });
+		chart = new Highcharts.Chart({
+			chart: {
+				renderTo: '<?php echo $this->id;?>',
+				type: 'areaspline',
+				marginBottom: 25
+			},
+			title: {
+				text: false
+			},
+			subtitle: {
+				text: false
+			},
+			xAxis: {
+				categories: [<?php echo join(',', $this->stats['print'])?>]
+			},
+			yAxis: {
+				title: {
+					text: false
+				},
+				plotLines: [{
+					value: 0,
+					width: 1,
+					color: '#808080'
+				}]
+			},
+			plotOptions: {
+				line: {
+					stacking: 'normal'
+				},
+				series: {
+	                marker: {
+	                    enabled: false
+	                }
+	            }
+			},
+			tooltip: {
+				formatter: function() {
+						return '<b>'+ this.series.name +'</b><br/>'+
+						this.x +': '+ this.y;
+				}
+			},
+			legend: {
+				enabled: false
+			},
+			credits: {
+                enabled: false
+            },
+			series: [{
+                name: 'Subscribers',
+                data: [<?php echo join(',', $this->stats['data'])?>]
+            }]
+		});
+	});
+</script>
+
+<div id="<?php echo $this->id;?>" style="min-height:200px;margin:0 0 30px 0;"></div>

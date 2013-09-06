@@ -14,6 +14,11 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+	/**
+	 * @var Doctrine\ORM\EntityManager
+	 */
+	protected $em;
+
     public function indexAction()
     {
     	// TODO move to factory
@@ -24,9 +29,31 @@ class IndexController extends AbstractActionController
 
     	$mandrillInfo = $mandrill->users->info();
 
+    	// Subscribers
+    	$listsToSubscribers = $this->getEntityManager()->getRepository('Application\Entity\ListsToSubscribers');
+    	$totalYearStats = $listsToSubscribers->getTotalForLastYear();
+    	$unsubYearStats = $listsToSubscribers->getUnsubsForLastYear();
+    	$complaintsYearStats = $listsToSubscribers->getComplaintsForLastYear();
+
         return new ViewModel(array(
         	'mandrillInfo' => $mandrillInfo,
         	'webhookStatus' => $webhookStatus,
+        	'totalYearStats' => $totalYearStats,
+        	'unsubYearStats' => $unsubYearStats,
+        	'complaintsYearStats' => $complaintsYearStats,
         ));
     }
+
+    public function setEntityManager(EntityManager $em)
+    {
+    	$this->em = $em;
+    }
+    public function getEntityManager()
+    {
+    	if (null === $this->em) {
+    		$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+    	}
+    	return $this->em;
+    }
+
 }

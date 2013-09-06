@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * A student
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="\Application\Repository\ListsToSubscribers")
  * @ORM\Table(name="lists_to_subscribers")
  * @property integer $id
  */

@@ -43,7 +43,7 @@ class Module
     			'invokables' => array(
     					'userStatus'       => 'Application\View\Helper\UserStatus',
     					'campaignStatus'       => 'Application\View\Helper\CampaignStatus',
-    					'printMandrillStats'       => 'Application\View\Helper\PrintMandrillStats',
+    					'printMandrillStats'       => 'Application\View\Helper\PrintMandrillStats'
     			)
     	);
 
