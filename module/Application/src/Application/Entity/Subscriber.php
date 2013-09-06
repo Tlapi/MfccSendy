@@ -34,19 +34,19 @@ class Subscriber
     protected $email;
 
     /**
-     * @ORM\Column(type="boolean");
+     * @ORM\Column(type="boolean", options={"default" = 0});
      * @var string
      */
-    protected $bounce_soft;
+    protected $bounce_soft = 0;
 
     /**
-     * @ORM\Column(type="boolean");
+     * @ORM\Column(type="boolean", options={"default" = 0});
      * @var string
      */
-    protected $bounced_hard;
+    protected $bounced_hard = 0;
 
     /**
-     * @ORM\Column(type="string");
+     * @ORM\Column(type="string", nullable=true);
      * @var string
      */
     protected $bounce_message;
@@ -63,6 +63,13 @@ class Subscriber
      */
     protected $lists_connection;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->inserted_at = new \DateTime();
+    }
 
     /**
      * Magic getter to expose protected properties.

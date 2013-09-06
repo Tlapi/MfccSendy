@@ -1,1 +1,16 @@
 <h1>Add subscribers</h1>
+
+<h2>Add name and email per line //todo add validation</h2><br/>
+<form method="POST" accept-charset="utf-8" class="form-vertical" enctype="multipart/form-data" id="line-import-form">
+
+	<label class="control-label" for="line">Name and email<br/><em style="color:#A1A1A1">(to import more than just name and email, import via CSV)</em></label>
+	<div class="control-group">
+		<div class="controls">
+			<textarea class="input-xlarge" id="line" name="line" rows="10" placeholder="Eg. Herman Miller,hermanmiller@gmail.com"></textarea>
+		</div>
+	</div>
+
+	<br />
+	<button type="submit" class="btn btn-inverse">Add</button>
+
+</form>

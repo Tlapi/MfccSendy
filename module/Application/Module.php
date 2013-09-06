@@ -53,6 +53,7 @@ class Module
     {
     	return array(
     			'invokables' => array(
+    					'listsService' => 'Application\Service\Lists'
     			),
     			'factories' => array(
     					'mandrill' => function ($sm) {

@@ -44,9 +44,14 @@ class ListsController extends AbstractActionController
     	$subscribersSlice = $lc->getSliceQuery($list->subsribers_connection, $limit = 30)->getResult();
     	//var_dump($subscribersSlice);
 
+    	// Stats
+    	$listsToSubscribers = $this->getEntityManager()->getRepository('Application\Entity\ListsToSubscribers');
+    	$totalYearStats = $listsToSubscribers->getTotalForLastYear($list->id);
+
         return new ViewModel(array(
 			'list' => $list,
-        	'subscribers' => $subscribersSlice
+        	'subscribers' => $subscribersSlice,
+        	'totalYearStats' => $totalYearStats,
         ));
     }
 
@@ -185,12 +190,38 @@ class ListsController extends AbstractActionController
 
     public function addSubscribersAction()
     {
+    	$id = (int) $this->params()->fromRoute('id', 0);
 
+    	// Get lists repo
+    	$lists = $this->getEntityManager()->getRepository('Application\Entity\Lists');
+    	$list = $lists->find($id);
+
+    	$request = $this->getRequest();
+    	if ($request->isPost()){
+			// TODO Move to form and validate before processing
+    		$data = $request->getPost();
+    		$this->getServiceLocator()->get('listsService')->importSubsribersFromString($list, $data['line']);
+
+    		$this->redirect()->toRoute('lists/show', array('id' => $list->id));
+    	}
     }
 
     public function removeSubscribersAction()
     {
+    	$id = (int) $this->params()->fromRoute('id', 0);
 
+    	// Get lists repo
+    	$lists = $this->getEntityManager()->getRepository('Application\Entity\Lists');
+    	$list = $lists->find($id);
+
+    	$request = $this->getRequest();
+    	if ($request->isPost()){
+    		// TODO Move to form and validate before processing
+    		$data = $request->getPost();
+    		$this->getServiceLocator()->get('listsService')->removeSubsribersFromString($list, $data['line']);
+
+    		$this->redirect()->toRoute('lists/show', array('id' => $list->id));
+    	}
     }
 
     public function setEntityManager(EntityManager $em)

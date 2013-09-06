@@ -1,3 +1,5 @@
+<script src="<?php echo $this->basePath()?>/js/highcharts/highcharts.js"></script>
+
 <h1>Show list</h1>
 
 <h2>List subscribers</h2>
@@ -7,75 +9,7 @@
 
 <br /><br />
 
-<script src="<?php echo $this->basePath()?>/js/highcharts/highcharts.js"></script>
-
-<script type="text/javascript">
-	var month=new Array();
-	month[0]="Jan";month[1]="Feb";month[2]="Mar";month[3]="Apr";month[4]="May";month[5]="Jun";month[6]="Jul";month[7]="Aug";month[8]="Sep";month[9]="Oct";month[10]="Nov";month[11]="Dec";
-
-	var chart;
-	$(document).ready(function() {
-		Highcharts.setOptions({
-	        colors: ['#468847', '#B94A48', '#333333']
-	    });
-		chart = new Highcharts.Chart({
-			chart: {
-				renderTo: 'container',
-				type: 'areaspline',
-				marginBottom: 25
-			},
-			title: {
-				text: false
-			},
-			subtitle: {
-				text: false
-			},
-			xAxis: {
-				categories: [
-				month[9]+" 12",month[10]+" 12",month[11]+" 12",month[0]+" 13",month[1]+" 13",month[2]+" 13",month[3]+" 13",month[4]+" 13",month[5]+" 13",month[6]+" 13",month[7]+" 13",month[8]+" 13"						]
-			},
-			yAxis: {
-				title: {
-					text: false
-				},
-				plotLines: [{
-					value: 0,
-					width: 1,
-					color: '#808080'
-				}]
-			},
-			plotOptions: {
-				line: {
-					stacking: 'normal'
-				},
-				series: {
-	                marker: {
-	                    enabled: false
-	                }
-	            }
-			},
-			tooltip: {
-				formatter: function() {
-						return '<b>'+ this.series.name +'</b><br/>'+
-						this.x +': '+ this.y;
-				}
-			},
-			legend: {
-				enabled: false
-			},
-			credits: {
-                enabled: false
-            },
-			series: [{
-                name: 'Subscribers',
-                data: [
-                0,0,0,0,105894,105896,105896,105956,105961,105967,106030,106043		                ]
-            }]
-		});
-	});
-</script>
-// demo graph
-<div id="container" style="min-height:200px;margin:0 0 30px 0;"></div>
+<?php echo $this->partial('partials/graph', array('id' => 'totalYearStats', 'stats' => $this->totalYearStats, 'colors' => array("'#468847'", "'#B94A48'", "'#333333'")))?>
 
 <table class="table table-striped">
 	<thead>
@@ -98,7 +32,7 @@
 			<?php echo $subscriber_connection->subscriber->email?>
 		</td>
 		<td>
-			//todo last activity
+			<?php echo $subscriber_connection->last_activity_at->format('Y-m-d H:i:s');?>
 		</td>
 		<td>
 			<?php echo $this->userStatus($subscriber_connection->status)?>

@@ -58,6 +58,23 @@ class ListsToSubscribers
     protected $last_activity_at;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->subscribed_at = new \DateTime();
+    	$this->last_activity_at = new \DateTime();
+    }
+
+    /**
+     * @PrePersist
+     */
+    public function onPrePersistSetActivityDate()
+    {
+    	$this->last_activity_at = new \DateTime();
+    }
+
+    /**
      * Magic getter to expose protected properties.
      *
      * @param DateTime $property
