@@ -31,7 +31,7 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 	protected $em;
 
 	/**
-	 * Text send campaign
+	 * Test send campaign
 	 * @param array $emails
 	 */
 	public function sendTest($emails = array())
@@ -57,6 +57,24 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 		}
 
 		$this->getEntityManager()->flush();
+	}
+
+	/**
+	 * Send campaign or resume sending
+	 */
+	public function sendCampaign()
+	{
+		$this->constructMessage();
+
+		// SET some recipients
+		//$this->setRecipients($recipients);
+
+		/*
+		$this->mandrill->messages->send(
+			$this->message,
+			true
+		);*/
+
 	}
 
 	/**

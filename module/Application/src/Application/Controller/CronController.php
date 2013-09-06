@@ -14,12 +14,38 @@ use Zend\View\Model\ViewModel;
 
 class CronController extends AbstractActionController
 {
+
+	/**
+	 * @var Doctrine\ORM\EntityManager
+	 */
+	protected $em;
+
     public function indexAction()
     {
 
-        return new ViewModel(array(
+    	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
 
-        ));
+    	// Get ONE active campaign and send / or continue sending
+    	$campaign = $campaigns->findOneBy(array('status' => \Application\Entity\Campaign::STATUS_SENDING));
+
+    	// TODO set Di
+    	$campaignSender = $this->getServiceLocator()->get('campaignSender');
+    	$campaignSender->setCampaign($campaign);
+    	$campaignSender->sendCampaign();
+
+        die('cron send');
+    }
+
+    public function setEntityManager(EntityManager $em)
+    {
+    	$this->em = $em;
+    }
+    public function getEntityManager()
+    {
+    	if (null === $this->em) {
+    		$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+    	}
+    	return $this->em;
     }
 
 }
