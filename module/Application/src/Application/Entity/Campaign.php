@@ -139,6 +139,21 @@ class Campaign
      * 4 - error
      */
     protected $status;
+    
+    /**
+     * @ORM\Column(type="integer", options={"default" = 0});
+     * @var int
+     */
+    protected $last_sent_id;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->status = self::STATUS_DRAFT;
+    	$this->last_sent_id = 0;
+    }
 
     /**
      * Magic getter to expose protected properties.
@@ -229,5 +244,6 @@ class Campaign
     	$this->plain_text = (isset($data['plain_text']))     ? $data['plain_text']     : null;
     	$this->html_text = (isset($data['html_text']))     ? $data['html_text']     : null;
     	$this->status = (isset($data['status']))     ? $data['status']     : null;
+    	$this->last_sent_id = (isset($data['last_sent_id']))     ? $data['last_send_id']     : null;
     }
 }

@@ -23,15 +23,39 @@ class CronController extends AbstractActionController
     {
 
     	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
-
+    	
+    	// Get ONE preapring campaing and upload the template to mandrill
+    	$campaign = $campaigns->findOneBy(array('status' => \Application\Entity\Campaign::STATUS_PREPARING));
+    	
+    	if($campaign!=null)
+    	{	$campaignSender = $this->getServiceLocator()->get('campaignSender');
+    		$campaignSender->setCampaign($campaign);
+    		
+    		try {	
+    			$campaignSender->uploadTemplate();
+    			$campaign->status = $campaign::STATUS_SENDING;
+    			$this->getEntityManager()->persist($campaign);
+    			$this->getEntityManager()->flush();
+	   		} catch (Exception $e) {
+    			$campaign->status = $campaign::STATUS_ERROR;
+    			$this->getEntityManager()->persist($campaign);
+    			$this->getEntityManager()->flush();
+    		}
+    		
+    		
+    		
+    	}
+    	
     	// Get ONE active campaign and send / or continue sending
     	$campaign = $campaigns->findOneBy(array('status' => \Application\Entity\Campaign::STATUS_SENDING));
 
-    	// TODO set Di
-    	$campaignSender = $this->getServiceLocator()->get('campaignSender');
-    	$campaignSender->setCampaign($campaign);
-    	$campaignSender->sendCampaign();
-
+    	if($campaign!=null)
+    	{	$campaignSender = $this->getServiceLocator()->get('campaignSender');
+    		$campaignSender->setCampaign($campaign);
+	    	// TODO set Di
+    		$campaignSender->sendCampaign();
+		
+    	}
         die('cron send');
     }
 
