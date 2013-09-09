@@ -13,10 +13,10 @@
 	</thead>
 	<tbody>
 		<?php foreach($this->campaign->tests as $testMail){?>
-		<tr>
+		<tr rel="<?php echo $testMail->email?>">
 			<td><?php echo $testMail->email?></td>
-			<td><?php echo ($testMail->opened?'YES: '.$testMail->opened:'NO')?></td>
-			<td><?php echo ($testMail->clicked?'YES: '.$testMail->clicked:'NO')?></td>
+			<td class="open"><?php echo ($testMail->opened?'YES: '.$testMail->opened->format('Y-m-d H:i:s'):'NO')?></td>
+			<td class="click"><?php echo ($testMail->clicked?'YES: '.$testMail->clicked->format('Y-m-d H:i:s'):'NO')?></td>
 		</tr>
 		<?php }?>
 	</tbody>
@@ -51,3 +51,21 @@ echo $this->form()->render($form);
 <blockquote><strong>Subject</strong> <span class="label"><?php echo $this->campaign->subject?></span></blockquote>
 
 // todo show preview (iframe?)
+
+<script src=http://cdn.pubnub.com/pubnub-3.5.3.1.min.js ></script>
+<script>(function(){
+
+    var pubnub = PUBNUB.init({ subscribe_key : 'sub-677ba457-b147-11e1-b52f-a7abc5428a24' });
+
+    // LISTEN
+    pubnub.subscribe({
+        channel : "mfcc_sender_test_event",
+        message : function(m){
+        	var obj = jQuery.parseJSON(m);
+        	$('table tr[rel="' + obj.email + '"] .' + obj.event).text('YES: ' + obj.ts);
+        }
+    });
+
+    
+
+})();</script>

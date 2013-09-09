@@ -3,6 +3,7 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * A student
@@ -75,6 +76,24 @@ class Campaign
      * @var array
      */
     protected $recepient_lists;
+    
+    /**
+     * @ORM\Column(type="array", nullable=true);
+     * @var array
+     */
+    protected $os;
+    
+    /**
+     * @ORM\Column(type="array", nullable=true);
+     * @var array
+     */
+    protected $ua;
+    
+    /**
+     * @ORM\Column(type="array", nullable=true);
+     * @var array
+     */
+    protected $location;
 
     /**
      * @ORM\Column(type="datetime", nullable=true);
@@ -104,6 +123,11 @@ class Campaign
      * @ORM\OneToMany(targetEntity="Application\Entity\CampaignTests", mappedBy="campaign")
      */
     private $tests;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignLog", mappedBy="campaign")
+     */
+    private $log;
 
     /**
      * @ORM\Column(type="integer", options={"default" = 0});
@@ -136,6 +160,58 @@ class Campaign
     public function __set($property, $value)
     {
     	$this->$property = $value;
+    }
+    
+    /**
+     * Get last opened mails from log
+     */
+    public function getLastOpened()
+    {
+    	return $this->filterLatestLog('open');
+    }
+    
+    /**
+     * Get last clicked mails from log
+     */
+    public function getLastClicked()
+    {
+    	return $this->filterLatestLog('click');
+    }
+    
+    /**
+     * Get last clicked mails from log
+     */
+    public function getLastBounced()
+    {
+    	return $this->filterLatestLog(array('hard_bounce', 'soft_bounce'));
+    }
+    
+    /**
+     * Get last clicked mails from log
+     */
+    public function getLastSpam()
+    {
+    	return $this->filterLatestLog('spam');
+    }
+    
+    /**
+     * Get last 10 records for provided event ordered by timestamp
+     * @mixed $event
+     */
+    public function filterLatestLog($event)
+    {
+    	$criteria = Criteria::create();
+    	if(is_array($event)){
+    		foreach($event as $e){
+    			$criteria->orWhere(Criteria::expr()->eq("event", $e));
+    		}
+    	} else {
+    		$criteria->where(Criteria::expr()->eq("event", $event));
+    	}
+    	
+    	$criteria->orderBy(array("occured_at" => Criteria::DESC))
+    	->setMaxResults(10);
+    	return $this->log->matching($criteria);
     }
 
     public function getArrayCopy()

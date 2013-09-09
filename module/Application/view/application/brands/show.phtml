@@ -67,6 +67,7 @@
 			<td>bounced</td>
 			<td>complaints</td>
 			<td>edit</td>
+			<td>split</td>
 			<td>delete</td>
 		</tr>
 	</thead>
@@ -95,11 +96,18 @@
 			<a href="<?php echo $this->url('lists/edit', array('id' => $list->id))?>">Edit</a>
 		</td>
 		<td>
+			<a href="<?php echo $this->url('lists/edit', array('id' => $list->id))?>">Split (todo)</a>
+		</td>
+		<td>
 			<a href="<?php echo $this->url('lists/delete', array('id' => $list->id))?>">Delete</a>
 		</td>
 	</tr>
 	<?php }?>
 	</tbody>
 </table>
+
+<div class="pull-right">
+	<a href="<?php echo $this->url('lists/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Merge (todo)</a>
+</div>
 
 <a href="<?php echo $this->url('lists/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Add list</a>

@@ -6,6 +6,10 @@
 	Note: this is demo report for campaign with tag: <strong>pardal</strong>
 </div>
 
+<div class="well">
+	TODO: share capmaign (CM), View (CM)
+</div>
+
 <h1>Campaign report <?php echo $this->campaignStatus($this->campaign->status)?></h1>
 
 Sent to <span class="label"><?php echo $this->stats['info']['sent']?> subscribers</span>
@@ -21,7 +25,7 @@ Reputation for this campaign: <?php echo $this->stats['info']['reputation']?>
 	<br /><br />
 	<span class="label"><?php echo $this->stats['info']['clicks']?></span> clicked a link (<?php echo $this->stats['info']['unique_clicks']?> unique)
 	<br /><br />
-	<span class="label"></span> unsubscribed (relies on webhooks)
+	<span class="label"></span> unsubscribed (TODO)
 	<br /><br />
 	<span class="label"><?php echo $this->stats['info']['hard_bounces'] + $this->stats['info']['soft_bounces']?></span> bounced (<?php echo $this->stats['info']['hard_bounces']?> hard, <?php echo $this->stats['info']['soft_bounces']?> soft)
 	<br /><br />
@@ -30,27 +34,117 @@ Reputation for this campaign: <?php echo $this->stats['info']['reputation']?>
 
 <br /><br />
 
-<strong>Relies on webhooks:</strong>
-
 <h4>Link activity</h4>
+
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->getLastClicked() as $row){?>
+  			<tr>
+  				<td><b><?php echo $row->email?></b></td>
+  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
+  			</tr>
+  			<?php }?>
+  		</tbody>
+</table>
 
 <h4>Last 10 opened</h4>
 
-<h4>Last 10 unsubscribed</h4>
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->getLastOpened() as $row){?>
+  			<tr>
+  				<td><b><?php echo $row->email?></b></td>
+  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
+  			</tr>
+  			<?php }?>
+  		</tbody>
+</table>
+
+<h4>Last 10 unsubscribed (todo)</h4>
 
 <h4>Last 10 bounced</h4>
 
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->getLastBounced() as $row){?>
+  			<tr>
+  				<td><b><?php echo $row->email?></b></td>
+  				<td><b><?php echo $row->event?></b></td>
+  				<td><b><?php echo $row->msg?></b></td>
+  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
+  			</tr>
+  			<?php }?>
+  		</tbody>
+</table>
+
 <h4>Last 10 marked as spam</h4>
 
-<h4>Map</h4>
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->getLastSpam() as $row){?>
+  			<tr>
+  				<td><b><?php echo $row->email?></b></td>
+  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
+  			</tr>
+  			<?php }?>
+  		</tbody>
+</table>
+
+<h4>Live map</h4>
 
 <div id="map-canvas" style="width: 100%; height: 600px"></div>
 
-<h4>Countries</h4>
+<h4>Countries /pie+table</h4>
 
-<h4>Operation systems</h4>
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->location as $country => $regions){?>
+  				<?php foreach($regions as $region => $counter){?>
+	  			<tr>
+	  				<td><b><?php echo $country?></b></td>
+	  				<td><?php echo $region?></td>
+	  				<td><?php echo $counter?></td>
+	  			</tr>
+  				<?php }?>
+  			<?php }?>
+  		</tbody>
+</table>
 
-<h4>Clients</h4>
+<h4>Operation systems /pie+table</h4>
+
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->os as $family => $names){?>
+  				<?php foreach($names as $name => $counter){?>
+	  			<tr>
+	  				<td><b><?php echo $family?></b></td>
+	  				<td><?php echo $name?></td>
+	  				<td><?php echo $counter?></td>
+	  			</tr>
+  				<?php }?>
+  			<?php }?>
+  		</tbody>
+</table>
+
+<h4>Clients /pie+table</h4>
+
+<table class="table">
+  		<tbody>
+  			<?php foreach($this->campaign->ua as $family => $versions){?>
+  				<?php foreach($versions as $version => $counter){?>
+	  			<tr>
+	  				<td><b><?php echo $family?></b></td>
+	  				<td><?php echo $version?></td>
+	  				<td><?php echo $counter?></td>
+	  			</tr>
+  				<?php }?>
+  			<?php }?>
+  		</tbody>
+</table>
+
+<h4>Mobile vs. Desktop /pie</h4>
+
+<script src=http://cdn.pubnub.com/pubnub-3.5.3.1.min.js ></script>
 
 <script>
 $(document).ready(function () {
@@ -60,23 +154,25 @@ var mapOptions = {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-new google.maps.Map(document.getElementById('map-canvas'),
+var map = new google.maps.Map(document.getElementById('map-canvas'),
 		mapOptions);
+
+var pubnub = PUBNUB.init({ subscribe_key : 'sub-677ba457-b147-11e1-b52f-a7abc5428a24' });
+
+//LISTEN
+pubnub.subscribe({
+ channel : "mfcc_sender_event",
+ message : function(m){
+ 	var obj = jQuery.parseJSON(m);
+ 	console.log(obj);
+ 	//alert(m);
+ 	var pos = new google.maps.LatLng(obj.latitude, obj.longitude);
+ 	var marker = new google.maps.Marker({
+ 	      position: pos,
+ 	      map: map
+ 	});
+ }
+});
+
 });
 </script>
-
-<script src=http://cdn.pubnub.com/pubnub-3.5.3.1.min.js ></script>
-<script>(function(){
-
-    var pubnub = PUBNUB.init({ subscribe_key : 'sub-677ba457-b147-11e1-b52f-a7abc5428a24' });
-
-    // LISTEN
-    pubnub.subscribe({
-        channel : "mfcc_sender_event",
-        message : function(m){
-        	var obj = jQuery.parseJSON(m);
-        	console.log(obj);
-        }
-    });
-
-})();</script>

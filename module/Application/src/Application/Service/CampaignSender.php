@@ -9,6 +9,12 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class CampaignSender implements ServiceLocatorAwareInterface {
 
+	const MESSAGE_TEST_TAG = 'mfsender_test';
+	
+	const CAMPAIGN_TAG_PREFIX = 'campaign_';
+	
+	const BRAND_TAG_PREFIX = 'brand_';
+	
 	/**
 	 * @var \Mandrill;
 	 */
@@ -36,7 +42,7 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 	 */
 	public function sendTest($emails = array())
 	{
-		$this->constructMessage();
+		$this->constructMessage(true);
 
 		$recipients = array();
 		foreach($emails as $email){
@@ -87,10 +93,12 @@ class CampaignSender implements ServiceLocatorAwareInterface {
 		$this->message['text'] = $this->campaign->plain_text;
 		$this->message['subject'] = $this->campaign->subject;
 		$this->message['from_email'] = $this->campaign->from_email;
+		$this->message['track_opens'] = true;
+		$this->message['track_clicks'] = true;
 		if($test)
-			$this->message['tags'] = array('campaign_'.$this->campaign->id.'_test');
+			$this->message['tags'] = array(self::MESSAGE_TEST_TAG, self::CAMPAIGN_TAG_PREFIX.$this->campaign->id);
 		else
-			$this->message['tags'] = array('brand_'.$this->campaign->brand->id, 'campaign_'.$this->campaign->id);
+			$this->message['tags'] = array(self::BRAND_TAG_PREFIX.$this->campaign->brand->id, self::CAMPAIGN_TAG_PREFIX.$this->campaign->id);
 
 		return $this->message;
 	}

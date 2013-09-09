@@ -2,6 +2,10 @@
 
 <div class="hero-unit">
     <h1><?php echo $this->translate('Dashboard') ?></h1>
+    
+    <div class="well">
+    	TODO: Support for Sendgrid and Amazon?
+    </div>
 
     <h2>Your Mandrill account stats</h2>
 
@@ -40,7 +44,7 @@
 
 	<h2>Webhooks status</h2>
 
-	<?php if($this->webhooks){?>
+	<?php if($this->webhookStatus){?>
 		<div class="alert alert-success">
 			Webhook is set up.
 		</div>

@@ -21,7 +21,7 @@ class Webhooks implements ServiceLocatorAwareInterface {
 	 */
 	public function checkWebhookStatus()
 	{
-		// TODO check loalhost
+		// TODO check localhost
 		foreach($this->webhooksList as $hook){
 			if($this->getWebhookUrl() == $hook['url']){
 				return true;
