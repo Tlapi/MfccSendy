@@ -23,15 +23,15 @@ class CronController extends AbstractActionController
     {
 
     	$campaigns = $this->getEntityManager()->getRepository('Application\Entity\Campaign');
-    	
+    	/*
     	// Get ONE preapring campaing and upload the template to mandrill
     	$campaign = $campaigns->findOneBy(array('status' => \Application\Entity\Campaign::STATUS_PREPARING));
-    	
+
     	if($campaign!=null)
     	{	$campaignSender = $this->getServiceLocator()->get('campaignSender');
     		$campaignSender->setCampaign($campaign);
-    		
-    		try {	
+
+    		try {
     			$campaignSender->uploadTemplate();
     			$campaign->status = $campaign::STATUS_SENDING;
     			$this->getEntityManager()->persist($campaign);
@@ -41,11 +41,11 @@ class CronController extends AbstractActionController
     			$this->getEntityManager()->persist($campaign);
     			$this->getEntityManager()->flush();
     		}
-    		
-    		
-    		
+
+
+
     	}
-    	
+
     	// Get ONE active campaign and send / or continue sending
     	$campaign = $campaigns->findOneBy(array('status' => \Application\Entity\Campaign::STATUS_SENDING));
 
@@ -54,8 +54,8 @@ class CronController extends AbstractActionController
     		$campaignSender->setCampaign($campaign);
 	    	// TODO set Di
     		$campaignSender->sendCampaign();
-		
-    	}
+
+    	}*/
         die('cron send');
     }
 

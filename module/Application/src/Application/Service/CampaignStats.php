@@ -24,7 +24,7 @@ class CampaignStats implements ServiceLocatorAwareInterface {
 
 		$stats = array();
 
-		$stats['info'] = $this->getMandrill()->tags->info('pardal');
+		$stats['info'] = $this->getMandrill()->tags->info(\Application\Service\CampaignSender::CAMPAIGN_TAG_PREFIX.$campaign->id);
 
 		return $stats;
 

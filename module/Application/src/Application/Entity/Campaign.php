@@ -76,19 +76,19 @@ class Campaign
      * @var array
      */
     protected $recepient_lists;
-    
+
     /**
      * @ORM\Column(type="array", nullable=true);
      * @var array
      */
     protected $os;
-    
+
     /**
      * @ORM\Column(type="array", nullable=true);
      * @var array
      */
     protected $ua;
-    
+
     /**
      * @ORM\Column(type="array", nullable=true);
      * @var array
@@ -120,12 +120,12 @@ class Campaign
     private $brand;
 
     /**
-     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignTests", mappedBy="campaign")
+     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignTests", mappedBy="campaign", cascade={"remove"}, orphanRemoval=true)
      */
     private $tests;
-    
+
     /**
-     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignLog", mappedBy="campaign")
+     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignLog", mappedBy="campaign", cascade={"remove"}, orphanRemoval=true)
      */
     private $log;
 
@@ -139,13 +139,13 @@ class Campaign
      * 4 - error
      */
     protected $status;
-    
+
     /**
      * @ORM\Column(type="integer", options={"default" = 0});
      * @var int
      */
     protected $last_sent_id;
-    
+
     /**
      * Constructor
      */
@@ -176,7 +176,7 @@ class Campaign
     {
     	$this->$property = $value;
     }
-    
+
     /**
      * Get last opened mails from log
      */
@@ -184,7 +184,7 @@ class Campaign
     {
     	return $this->filterLatestLog('open');
     }
-    
+
     /**
      * Get last clicked mails from log
      */
@@ -192,7 +192,7 @@ class Campaign
     {
     	return $this->filterLatestLog('click');
     }
-    
+
     /**
      * Get last clicked mails from log
      */
@@ -200,7 +200,7 @@ class Campaign
     {
     	return $this->filterLatestLog(array('hard_bounce', 'soft_bounce'));
     }
-    
+
     /**
      * Get last clicked mails from log
      */
@@ -208,7 +208,7 @@ class Campaign
     {
     	return $this->filterLatestLog('spam');
     }
-    
+
     /**
      * Get last 10 records for provided event ordered by timestamp
      * @mixed $event
@@ -223,7 +223,7 @@ class Campaign
     	} else {
     		$criteria->where(Criteria::expr()->eq("event", $event));
     	}
-    	
+
     	$criteria->orderBy(array("occured_at" => Criteria::DESC))
     	->setMaxResults(10);
     	return $this->log->matching($criteria);

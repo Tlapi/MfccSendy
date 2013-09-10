@@ -68,58 +68,59 @@ class HooksController extends AbstractActionController
 	    			// Production message
 
 	    			// TODO temporary get campaign num 1
-	    			$campaign = $campaigns->find(1);
-	    			// $campaign = $campaigns->find($this->getCampaignIdFromTags($event->msg->tags));
+	    			$campaign = $campaigns->find($this->getCampaignIdFromTags($event->msg->tags));
 
-	    			// Log event to db
-	    			$logRow = new \Application\Entity\CampaignLog();
-	    			$logRow->event = $event->event;
-	    			$logRow->email = $event->msg->email;
-	    			$logRow->msg = $event->msg->bounce_description;
-	    			$logRow->campaign = $campaign;
+	    			if($campaign){
+		    			// Log event to db
+		    			$logRow = new \Application\Entity\CampaignLog();
+		    			$logRow->event = $event->event;
+		    			$logRow->email = $event->msg->email;
+		    			$logRow->msg = $event->msg->bounce_description;
+		    			$logRow->campaign = $campaign;
 
-	    			if($event->event=='open'){
-	    				// User Agent
-	    				$ua = $campaign->ua;
-	    				if(isset($ua[$event->user_agent_parsed->ua_family][$event->user_agent_parsed->ua_version]))
-	    					$ua[$event->user_agent_parsed->ua_family][$event->user_agent_parsed->ua_version]++;
-	    				else
-	    					$ua[$event->user_agent_parsed->ua_family][$event->user_agent_parsed->ua_version] = 1;
-	    				$campaign->ua = $ua;
+		    			if($event->event=='open'){
+		    				// User Agent
+		    				$ua = $campaign->ua;
+		    				if(isset($ua[$event->user_agent_parsed->ua_family][$event->user_agent_parsed->ua_version]))
+		    					$ua[$event->user_agent_parsed->ua_family][$event->user_agent_parsed->ua_version]++;
+		    				else
+		    					$ua[$event->user_agent_parsed->ua_family][$event->user_agent_parsed->ua_version] = 1;
+		    				$campaign->ua = $ua;
 
-	    				// OS
-	    				$os = $campaign->os;
-	    				if(isset($os[$event->user_agent_parsed->os_family][$event->user_agent_parsed->os_name]))
-	    					$os[$event->user_agent_parsed->os_family][$event->user_agent_parsed->os_name]++;
-	    				else
-	    					$os[$event->user_agent_parsed->os_family][$event->user_agent_parsed->os_name] = 1;
-	    				$campaign->os = $os;
+		    				// OS
+		    				$os = $campaign->os;
+		    				if(isset($os[$event->user_agent_parsed->os_family][$event->user_agent_parsed->os_name]))
+		    					$os[$event->user_agent_parsed->os_family][$event->user_agent_parsed->os_name]++;
+		    				else
+		    					$os[$event->user_agent_parsed->os_family][$event->user_agent_parsed->os_name] = 1;
+		    				$campaign->os = $os;
 
-	    				// Location
-	    				// TODO handle city
-	    				$location = $campaign->location;
-	    				if(isset($location[$event->location->country][$event->location->region]))
-	    					$location[$event->location->country][$event->location->region]++;
-	    				else
-	    					$location[$event->location->country][$event->location->region] = 1;
-	    				$campaign->location = $location;
+		    				// Location
+		    				// TODO handle city
+		    				$location = $campaign->location;
+		    				if(isset($location[$event->location->country][$event->location->region]))
+		    					$location[$event->location->country][$event->location->region]++;
+		    				else
+		    					$location[$event->location->country][$event->location->region] = 1;
+		    				$campaign->location = $location;
 
-	    				$this->getEntityManager()->persist($campaign);
+		    				$this->getEntityManager()->persist($campaign);
+		    			}
+
+		    			$this->getEntityManager()->persist($logRow);
+
+		    			// Live feed
+		    			$info = $pubnub->publish(array(
+		    					'channel' => 'mfcc_sender_event', ## REQUIRED Channel to Send
+		    					'message' => json_encode(array(
+		    							'email' => $event->msg->email,
+		    							'ts' => $event->ts,
+		    							'latitude' => $event->location->latitude,
+		    							'longitude' => $event->location->longitude,
+		    							'event' => $event->event
+		    					))
+		    			));
 	    			}
-
-	    			$this->getEntityManager()->persist($logRow);
-
-	    			// Live feed
-	    			$info = $pubnub->publish(array(
-	    					'channel' => 'mfcc_sender_event', ## REQUIRED Channel to Send
-	    					'message' => json_encode(array(
-	    							'email' => $event->msg->email,
-	    							'ts' => $event->ts,
-	    							'latitude' => $event->location->latitude,
-	    							'longitude' => $event->location->longitude,
-	    							'event' => $event->event
-	    					))
-	    			));
 	    		}
 
     		}
