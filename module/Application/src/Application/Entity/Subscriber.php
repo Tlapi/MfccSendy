@@ -62,6 +62,11 @@ class Subscriber
      * @ORM\OneToMany(targetEntity="Application\Entity\ListsToSubscribers", mappedBy="subscriber")
      */
     protected $lists_connection;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\CampaignLog", mappedBy="subscriber")
+     */
+    private $log;
 
     /**
      * Constructor

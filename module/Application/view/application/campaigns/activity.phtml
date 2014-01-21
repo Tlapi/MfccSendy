@@ -1,0 +1,81 @@
+<?php echo $this->partial('application/campaigns/report-menu.phtml')?>
+
+<h3>Activity - <?php echo $this->action?></h3>
+
+<table class="<?php echo $this->filter?> table basetable">
+	<thead>
+		<tr>
+			<td>Email</td>
+			<td>User rating</td>
+			<td><?php echo $this->action?></td>
+			<!-- <td>Name</td> -->
+			<td>Timestamp</td>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach($this->log as $row){?>
+		<tr>
+			<td><a href="<?php echo $this->url('subscribers/show', array('email' => $row[0]->email))?>"><?php echo $row[0]->email?></a></td>
+			<td>? / 5</td>
+			<td>
+				<?php if($this->filter=='bounced'){?>
+					<span class="label <?php echo ($row[0]->event=='hard_bounce'?'label-danger':'label-warning')?>"><?php echo $row[0]->event?></span>
+					&nbsp;&nbsp;
+					<?php echo $row[0]->msg?>
+				<?php } elseif($this->filter=='complained') {?>
+					<span class="label label-default">Marked as Spam</span>
+				<?php } elseif($this->filter=='unsubscribed') {?>
+					<span class="label label-warning">Unsubscribed</span>
+				<?php } else {?>
+					<?php echo $row['mycount']?>
+				<?php }?>
+			</td>
+			<!-- <td></td> -->
+			<td><?php echo $row[0]->occured_at->format('d.m.Y H:i')?></td>
+		</tr>
+	<?php }?>
+	</tbody>
+</table>
+
+<?php echo $this->paginationControl($this->log,
+                                    'Sliding',
+                                    'application/paginator'); ?>
+
+<div id="ajax-modal" class="modal fade" tabindex="-1" style="display: none;"></div>
+
+<script type="text/javascript">
+
+$.fn.modal.defaults.spinner = $.fn.modalmanager.defaults.spinner = 
+    '<div class="loading-spinner" style="width: 200px; margin-left: -100px;">' +
+        '<div class="progress progress-striped active">' +
+            '<div class="progress-bar" style="width: 100%;"></div>' +
+        '</div>' +
+    '</div>';
+    
+var $modal = $('#ajax-modal');
+
+$('table a').on('click', function(){
+  // create the backdrop and wait for next modal to be triggered
+  $('body').modalmanager('loading');
+
+  var target = $(this).attr('href');
+
+  $modal.load(target, '', function(){
+      $modal.modal();
+  });
+  return false;
+});
+
+$modal.on('click', '.update', function(){
+  $modal.modal('loading');
+  setTimeout(function(){
+    $modal
+      .modal('loading')
+      .find('.modal-body')
+        .prepend('<div class="alert alert-info fade in">' +
+          'Updated!<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+        '</div>');
+  }, 1000);
+});
+
+</script> 

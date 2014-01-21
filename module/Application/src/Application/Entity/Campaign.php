@@ -20,7 +20,9 @@ class Campaign
 	const STATUS_SENDING = 2;
 	const STATUS_SENT = 3;
 	const STATUS_ERROR = 4;
-
+	const STATUS_SENDING_LOCKED = 5;
+	const STATUS_PREPARING_LOCKED = 6;
+	
     /**
      * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -100,6 +102,12 @@ class Campaign
      * @var string
      */
     protected $sent_at;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true);
+     * @var string
+     */
+    protected $changed_at;
 
     /**
      * @ORM\Column(type="integer", nullable=true);
@@ -246,4 +254,114 @@ class Campaign
     	$this->status = (isset($data['status']))     ? $data['status']     : null;
     	$this->last_sent_id = (isset($data['last_sent_id']))     ? $data['last_send_id']     : null;
     }
+    
+    /**
+     * Get some stats formated tu use in charts
+     */
+ 	public function getFormatedOsStats(){
+ 		$os = array();
+ 		$os_cats = array();
+ 		$os_total = 0;
+ 		foreach($this->os as $family => $names){
+ 			foreach($names as $name => $counter){
+ 				$os[$family]['count'] += $counter;
+ 				$os[$family]['versions'][$name] = $counter;
+ 				$os_total += $counter;
+ 			}
+ 			arsort($os[$family]['versions']);
+ 		}
+ 		// Convert to percents
+ 		foreach($os as $family => $names){
+ 			$os[$family]['percent'] = round(($os[$family]['count'] / $os_total) * 100, 2);
+ 			foreach($os[$family]['versions'] as $name => $counter){
+ 				$ct = $os[$family]['versions'][$name];
+ 				unset($os[$family]['versions'][$name]);
+ 				$os[$family]['versions'][$name]['count'] = $ct;
+ 				$os[$family]['versions'][$name]['percent'] = round(($os[$family]['versions'][$name]['count'] / $os_total) * 100, 2);
+ 			}
+ 		}
+ 		arsort($os);
+ 		foreach($os as $family => $names){
+ 			$os_cats[] = "'".($family?$family:'Unknown')."'";
+ 		}
+ 		
+ 		return array(
+ 			'list' => $os,	
+ 			'cats' => $os_cats,	
+ 			'total' => $os_total,	
+ 		);
+ 	}
+ 	   
+ 	public function getFormatedClientsStats(){
+ 		$clients = array();
+    	$clients_cats = array();
+    	$clients_total = 0;
+    	foreach($this->ua as $family => $names){
+    		foreach($names as $name => $counter){
+    			$name = $family." ".$name;
+    			if($family=='Outlook 2007' || $family=='Outlook 2010' ){
+    				$name = $family;
+    				$family = 'Outlook';
+    			}
+    			$clients[$family]['count'] += $counter;
+    			$clients[$family]['versions'][$name] = $counter;
+    			$clients_total += $counter;
+    		}
+    		arsort($clients[$family]['versions']);
+    	}
+    	// Convert to percents
+    	foreach($clients as $family => $names){
+    		$clients[$family]['percent'] = round(($clients[$family]['count'] / $clients_total) * 100, 2);
+    		foreach($clients[$family]['versions'] as $name => $counter){
+    			$ct = $clients[$family]['versions'][$name];
+    			unset($clients[$family]['versions'][$name]);
+    			$clients[$family]['versions'][$name]['count'] = $ct;
+    			$clients[$family]['versions'][$name]['percent'] = round(($clients[$family]['versions'][$name]['count'] / $clients_total) * 100, 2);
+    		}
+    	}
+    	arsort($clients);
+    	foreach($clients as $family => $names){
+    		$clients_cats[] = "'".($family?$family:'Unknown')."'";
+    	}
+ 		
+ 		return array(
+ 			'list' => $clients,	
+ 			'cats' => $clients_cats,	
+ 			'total' => $clients_total,	
+ 		);
+ 	}
+ 	   
+ 	public function getFormatedLocationStats(){
+ 		$locations = array();
+    	$locations_cats = array();
+    	$locations_total = 0;
+    	foreach($this->location as $country => $regions){
+    		foreach($regions as $region => $counter){
+    			$locations[$country]['count'] += $counter;
+    			$locations[$country]['regions'][$region] = $counter;
+    			$locations_total += $counter;
+    		}
+    		arsort($locations[$country]['regions']);
+    	}
+    	// Convert to percents
+    	foreach($locations as $country => $regions){
+    		$locations[$country]['percent'] = round(($locations[$country]['count'] / $locations_total) * 100, 2);
+    		foreach($locations[$country]['regions'] as $region => $counter){
+    			$ct = $locations[$country]['regions'][$region];
+    			unset($locations[$country]['regions'][$region]);
+    			$locations[$country]['regions'][$region]['count'] = $ct;
+    			$locations[$country]['regions'][$region]['percent'] = round(($locations[$country]['regions'][$region]['count'] / $locations_total) * 100, 2);
+    		}
+    	}
+    	arsort($locations);
+    	foreach($locations as $country => $regions){
+    		$locations_cats[] = "'".($country?$country:'Unknown')."'";
+    	}
+ 		
+ 		return array(
+ 			'list' => $locations,	
+ 			'cats' => $locations_cats,	
+ 			'total' => $locations_total,	
+ 		);
+ 	}   
 }

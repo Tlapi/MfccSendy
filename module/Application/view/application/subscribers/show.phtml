@@ -1,0 +1,26 @@
+<div style="padding:5px 25px">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Subscriber info</h3>
+			
+			
+			<div class="well">
+				<strong>Email:</strong> <?php echo $this->subscriber->email?>
+			</div>
+			
+			<table class="table">
+				<tbody>
+				<?php foreach($this->log as $row){?>
+					<tr>
+						<td><a href="<?php echo $this->url('campaigns/show', array('id' => $row->campaign->id))?>"><?php echo $row->campaign->title?></a></td>
+						<td>
+							<?php if($row->msg){?><abbr title="<?php echo $row->msg?>"><?php echo $row->event?></abbr><?php } else {?><?php echo $row->event?><?php }?>
+						</td>
+						<td><?php echo $row->occured_at->format('d.m.Y H:i')?></td>
+					</tr>
+				<?php }?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

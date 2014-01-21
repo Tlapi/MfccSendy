@@ -1,0 +1,15 @@
+<h1><b><?php echo $this->brand->name?></b> campaigns</h1>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="well">
+
+			<?php if($this->FlashMessenger()->getMessages()){?><div class="alert alert-success"><?php echo $this->FlashMessenger()->render()?></div><?php }?>
+
+			<?php echo $this->partial('partials/table-campaigns',array('brand'=>$this->brand, 'campaignStats'=>$this->campaignStats));?>
+
+			<a href="<?php echo $this->url('campaigns/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Create & Send new campaign</a>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,401 @@
+<?php 
+mb_internal_encoding('UTF-8');
+def("DOMPDF_UNICODE_ENABLED", true);
+?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <?php echo $this->headTitle('Mailing Machinegun')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+        <style>
+		body{
+			font-family: Helvetica;
+			color: #333333;
+		}
+		table{
+			width: 100%;
+		}
+		table tr table tr td{
+			padding: 5px 15px;
+		}
+		.progress-bg{
+			background-color: #f5f5f5;
+			border-radius: 4px;
+			-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+			box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+		}
+		.progress-bar{
+			height: 20px;
+			background-color: #428bca;
+			border-radius: 4px;
+		}
+		.smallbar{
+			height: 20px;
+			width: 150px;
+			background-color: #f5f5f5;
+		}
+		.smallbar .bar{
+			height: 20px;
+			background-color: #428bca;
+		}
+		table.highlight{
+			background-color: #f8f8f8;
+			border: 1px solid #cccccc;
+			border-radius: 4px;
+		}
+		table.highlight tr td{
+			padding: 10px 15px;
+		}
+		table.center{
+			margin-top: 25px;
+			margin-bottom: 25px;
+		}
+		table.center tr td{
+			text-align: center;
+			border-right: 1px solid #e3e3e3;
+		}
+		table.center tr td h3{
+			font-size: 30px;
+			margin-bottom: 5px;
+			color: #2a6496;
+			margin-top: 0;
+		}
+		table.center tr td strong{
+		}
+		</style>
+
+    </head>
+    <body>
+    
+    	Generated: <?php echo date('d.m.Y G:i')?>
+    
+	    <h1><?php echo $this->campaign->title?> - Campaign report</h1>
+	    
+	    <h2 style="color: #cccccc">Overview</h2>
+		
+		<h3><?php echo number_format($this->stats['info']['sent'], 0, '', ' ')?> recipients</h3>
+		
+		<table class="highlight" style="background-color: #f8f8f8">
+			<tr>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td style="padding-left: 0"><b>Subject</b></td>
+							<td style="text-align: right"><span><?php echo $this->campaign->subject?></span></td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td><b>Delivered</b></td>
+							<td style="padding-right: 0;text-align: right;"><span><?php echo $this->campaign->changed_at->format('d.m.Y G:i')?></span></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td style="padding-left: 0"><b style="font-size: 20px">Open rate</b></td>
+							<td style="text-align: right;font-size: 30px;color: #2a6496;font-weight: bold;"><?php echo round(($this->stats['info']['unique_opens']/$this->stats['info']['sent'])*100, 2)?>%<</td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td><b style="font-size: 20px">Click rate</b></td>
+							<td style="padding-right: 0;text-align: right;font-size: 30px;color: #2a6496;font-weight: bold;"><?php echo round(($this->stats['info']['unique_clicks']/$this->stats['info']['sent'])*100, 2)?>%</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 50%;padding: 5px 15px;padding-left: 0;">
+					<div class="progress-bg">
+						<div class="progress-bar" style="width: <?php echo (round(($this->stats['info']['unique_opens']/$this->stats['info']['sent'])*100, 2)<1?1:round(($this->stats['info']['unique_opens']/$this->stats['info']['sent'])*100, 2))?>%;">
+		 				</div>
+		 			</div>
+				</td>
+				<td style="width: 50%;padding: 5px 15px;padding-right: 0;">
+					<div class="progress-bg">
+						<div class="progress-bar" style="width: <?php echo (round(($this->stats['info']['unique_clicks']/$this->stats['info']['sent'])*100, 2)<1?1:round(($this->stats['info']['unique_clicks']/$this->stats['info']['sent'])*100, 2))?>%;">
+		 				</div>
+		 			</div>
+				</td>
+			</tr>
+		</table>
+		
+		<table class="highlight center">
+			<tr>
+				<td style="width: 25%">
+					<h3><?php echo number_format($this->stats['info']['unique_opens'], 0, '', ' ')?></h3>
+					<strong>Opened</strong>
+				</td>
+				<td style="width: 25%">
+					<h3><?php echo number_format($this->stats['info']['unique_clicks'], 0, '', ' ')?></h3>
+					<strong>Clicked</strong>
+				</td>
+				<td style="width: 25%">
+					<h3><?php echo number_format($this->stats['info']['hard_bounces'] + $this->stats['info']['soft_bounces'], 0, '', ' ')?></h3>
+					<strong>Bounced</strong>
+				</td>
+				<td style="width: 25%;border-right:0;">
+					<h3><?php echo number_format($this->unsubCount, 0, '', ' ')?></h3>
+					<strong>Unsubscribed</strong>
+				</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td style="padding-left: 0"><b>Successful deliveries</b></td>
+							<td style="text-align: right"><b><?php echo number_format($this->stats['info']['sent'] - $this->stats['info']['hard_bounces'] - $this->stats['info']['soft_bounces'], 0, '', ' ')?></b>&nbsp;&nbsp;&nbsp;<?php echo round((($this->stats['info']['sent'] - $this->stats['info']['hard_bounces'] - $this->stats['info']['soft_bounces'])/$this->stats['info']['sent'])*100, 2)?>%</td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td><b>Clicks per unique opens</b></td>
+							<td style="padding-right: 0;text-align: right;"><?php echo round($this->stats['info']['unique_clicks']/$this->stats['info']['unique_opens'], 2)?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td style="padding-left: 0"><b>Total opens</b></td>
+							<td style="text-align: right"><?php echo number_format($this->stats['info']['opens'], 0, '', ' ')?></td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td><b>Total clicks</b></td>
+							<td style="padding-right: 0;text-align: right;"><?php echo number_format($this->stats['info']['clicks'], 0, '', ' ')?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td style="padding-left: 0"><b>Avg opens per user</b></td>
+							<td style="text-align: right"><?php echo round($this->stats['info']['opens']/$this->stats['info']['unique_opens'], 2)?></td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%">
+					<table>
+						<tr>
+							<td><b>Spam complaints</b></td>
+							<td style="padding-right: 0;text-align: right;"><?php echo $this->stats['info']['complaints']?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		<h1 style="page-break-before:always"><?php echo $this->campaign->title?> - Campaign report</h1>
+	    
+	    <h2 style="color: #cccccc">Top charts</h2>
+	    
+	    <table class="baselist">
+	    	<tr>
+	    		<td style="width: 50%">
+	    			<h3>Top links clicked</h3>
+				    <table style="width: 100%;">
+			    		<?php foreach($this->topClicked as $link){?>
+							<tr>
+								<td>
+									<a href="<?php echo $link[0]->msg?>">
+										<?php echo ((strlen($link[0]->msg) > 43) ? substr($link[0]->msg, 0, 40).'...' : $link[0]->msg)?>
+									</a>
+								</td>
+								<td><?php echo $link['mycount']?></td>
+							</tr>
+						<?php }?>
+				    </table>
+		    	</td>
+		    	<td style="width: 50%; vertical-align: top;">
+		    		<h3>Subscribers with most opens</h3>
+				    <table style="width: 100%;">
+			    		<?php foreach($this->mostOpens as $open){?>
+							<tr>
+								<td><?php echo $open[0]->email?></td>
+								<td><?php echo $open['mycount']?></td>
+							</tr>
+						<?php }?>
+				    </table>
+		    	</td>
+		    </tr>
+	    </table>
+	    
+		<h1 style="page-break-before:always"><?php echo $this->campaign->title?> - Campaign report</h1>
+	    
+	    <h2 style="color: #cccccc">Links activity</h2>
+	    
+	    <table class="baselist" style="width: 100%">
+	    	<?php foreach($this->links as $row){?>
+				<tr>
+					<td><a href="<?php echo $row[0]->msg?>" target="_blank"><?php echo ((strlen($row[0]->msg) > 93) ? substr($row[0]->msg, 0, 90).'...' : $row[0]->msg)?></a></td>
+					<td><?php echo $row['total']?></td>
+				</tr>
+			<?php }?>
+	    </table>
+	    
+		<h1 style="page-break-before:always"><?php echo $this->campaign->title?> - Campaign report</h1>
+	    
+	    <h2 style="color: #cccccc">Demographics</h2>
+	    
+	    <table>
+		  		<tbody>
+		  			<?php $t=0;foreach($this->locations as $country => $region){ $t++;?>
+			  			<tr>
+			  				<td><b style="font-size: 20px"><?php echo ($country?$country:'N/A')?></b></td>
+			  				<td style="text-align: right"><?php echo $region['count']?></td>
+			  				<td style="width: 180px">
+			  					<table style="padding: 0; margin: 0">
+			  						<tr>
+			  							<td style="width: 150px">
+			  								<div class="smallbar">
+						  						<div class="bar" style="width: <?php echo $region['percent']?>%"></div>
+						  					</div>
+			  							</td>
+			  							<td style="text-align: left; color: #cccccc;"><?php echo $region['percent']?>%</td>
+			  						</tr>
+			  					</table>
+			  				</td>
+			  			</tr>
+			  			<?php foreach($region['regions'] as $r_name => $r_props){?>
+				  			<tr>
+				  				<td style="padding-left: 50px"><b style="color: #999999;"><?php echo ($r_name?$r_name:'N/A')?></b></td>
+				  				<td style="text-align: right"><?php echo $r_props['count']?></td>
+				  				<td style="width: 180px">
+				  					<table style="padding: 0; margin: 0">
+				  						<tr>
+				  							<td style="width: 150px">
+				  								<div class="smallbar">
+							  						<div class="bar" style="width: <?php echo $r_props['percent']?>%"></div>
+							  					</div>
+				  							</td>
+				  							<td style="text-align: left; color: #cccccc;"><?php echo $r_props['percent']?>%</td>
+				  						</tr>
+				  					</table>
+				  				</td>
+				  			</tr>
+		  				<?php }?>
+		  			<?php }?>
+		  		</tbody>
+		</table>
+	    
+		<h1 style="page-break-before:always"><?php echo $this->campaign->title?> - Campaign report</h1>
+	    
+	    <h2 style="color: #cccccc">OS / Clients</h2>
+	    
+	    <h3>Operation systems</h3>
+	    
+	    <table>
+		  		<tbody>
+		  			<?php $t=0;foreach($this->os as $name => $family){ $t++;?>
+			  			<tr>
+			  				<td><b style="font-size: 20px"><?php echo ($name?$name:'N/A')?></b></td>
+			  				<td style="text-align: right"><?php echo $family['count']?></td>
+			  				<td style="width: 180px">
+			  					<table style="padding: 0; margin: 0">
+			  						<tr>
+			  							<td style="width: 150px">
+			  								<div class="smallbar">
+						  						<div class="bar" style="width: <?php echo $family['percent']?>%"></div>
+						  					</div>
+			  							</td>
+			  							<td style="text-align: left; color: #cccccc;"><?php echo $family['percent']?>%</td>
+			  						</tr>
+			  					</table>
+			  				</td>
+			  			</tr>
+			  			<?php foreach($family['versions'] as $v_name => $v_props){?>
+				  			<tr>
+				  				<td style="padding-left: 50px"><b style="color: #999999;"><?php echo ($v_name?$v_name:'N/A')?></b></td>
+				  				<td style="text-align: right"><?php echo $v_props['count']?></td>
+				  				<td style="width: 180px">
+				  					<table style="padding: 0; margin: 0">
+				  						<tr>
+				  							<td style="width: 150px">
+				  								<div class="smallbar">
+							  						<div class="bar" style="width: <?php echo $v_props['percent']?>%"></div>
+							  					</div>
+				  							</td>
+				  							<td style="text-align: left; color: #cccccc;"><?php echo $v_props['percent']?>%</td>
+				  						</tr>
+				  					</table>
+				  				</td>
+				  			</tr>
+		  				<?php }?>
+		  			<?php }?>
+		  		</tbody>
+		</table>
+	    
+	    <h3>Clients</h3>
+	    
+	    <table>
+		  		<tbody>
+		  			<?php $t=0;foreach($this->clients as $name => $family){ $t++;?>
+			  			<tr>
+			  				<td><b style="font-size: 20px"><?php echo ($name?$name:'N/A')?></b></td>
+			  				<td style="text-align: right"><?php echo $family['count']?></td>
+			  				<td style="width: 180px">
+			  					<table style="padding: 0; margin: 0">
+			  						<tr>
+			  							<td style="width: 150px">
+			  								<div class="smallbar">
+						  						<div class="bar" style="width: <?php echo $family['percent']?>%"></div>
+						  					</div>
+			  							</td>
+			  							<td style="text-align: left; color: #cccccc;"><?php echo $family['percent']?>%</td>
+			  						</tr>
+			  					</table>
+			  				</td>
+			  			</tr>
+			  			<?php foreach($family['versions'] as $v_name => $v_props){?>
+				  			<tr>
+				  				<td style="padding-left: 50px"><b style="color: #999999;"><?php echo ($v_name?$v_name:'N/A')?></b></td>
+				  				<td style="text-align: right"><?php echo $v_props['count']?></td>
+				  				<td style="width: 180px">
+				  					<table style="padding: 0; margin: 0">
+				  						<tr>
+				  							<td style="width: 150px">
+				  								<div class="smallbar">
+							  						<div class="bar" style="width: <?php echo $v_props['percent']?>%"></div>
+							  					</div>
+				  							</td>
+				  							<td style="text-align: left; color: #cccccc;"><?php echo $v_props['percent']?>%</td>
+				  						</tr>
+				  					</table>
+				  				</td>
+				  			</tr>
+		  				<?php }?>
+		  			<?php }?>
+		  		</tbody>
+		</table>
+	    
+	 </body>
+</html>
+	

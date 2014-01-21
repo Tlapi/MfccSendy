@@ -1,0 +1,137 @@
+<div class="row">
+
+	<div class="col-md-12">
+	
+		<h1>Stats</h1>
+		
+		<h2>Basic info</h2>
+		
+		<div class="well">
+			<table class="table">
+		  		<tbody>
+		  			<tr>
+		  				<td><b>Username</b></td>
+		  				<td><?php echo $this->mandrillInfo['username']?></td>
+		  				<td><b>Created at</b></td>
+		  				<td><?php echo $this->mandrillInfo['created_at']?></td>
+		  				<td><b>Public id</b></td>
+		  				<td><?php echo $this->mandrillInfo['public_id']?></td>
+		  			</tr>
+		  			<tr>
+		  				<td><b>Reputation</b></td>
+		  				<td><?php echo $this->mandrillInfo['reputation']?></td>
+		  				<td><b>Hourly quota</b></td>
+		  				<td><?php echo $this->mandrillInfo['hourly_quota']?></td>
+		  				<td><b>Backlog</b></td>
+		  				<td><?php echo $this->mandrillInfo['backlog']?></td>
+		  			</tr>
+		  		</tbody>
+			</table>
+		</div>
+		
+		<h2>Stats</h2>
+		
+		<div class="well">
+		
+			<table class="table">
+			
+				<thead>
+					<tr>
+						<th></th>
+						<th>Sent</th>
+						<th>Bounces (hard / soft)</th>
+						<th>Rejects</th>
+						<th>Complaints</th>
+						<th>Unsubscribes</th>
+						<th>Opens / unique</th>
+						<th>Clicks / unique</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Today</td>
+						<td><?php echo $this->mandrillInfo['stats']['today']['sent']?></td>
+						<td>
+							<?php echo ($this->mandrillInfo['stats']['today']['hard_bounces'] + $this->mandrillInfo['stats']['today']['soft_bounces'])?>
+							(<?php echo $this->mandrillInfo['stats']['today']['hard_bounces']?> / <?php echo $this->mandrillInfo['stats']['today']['soft_bounces']?>)
+						</td>
+						<td><?php echo $this->mandrillInfo['stats']['today']['rejects']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['today']['complaints']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['today']['unsubs']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['today']['opens']?> / <?php echo $this->mandrillInfo['stats']['today']['unique_opens']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['today']['clicks']?> / <?php echo $this->mandrillInfo['stats']['today']['unique_clicks']?></td>
+					</tr>
+					<tr>
+						<td>Last 7 days</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_7_days']['sent']?></td>
+						<td>
+							<?php echo ($this->mandrillInfo['stats']['last_7_days']['hard_bounces'] + $this->mandrillInfo['stats']['last_7_days']['soft_bounces'])?>
+							(<?php echo $this->mandrillInfo['stats']['last_7_days']['hard_bounces']?> / <?php echo $this->mandrillInfo['stats']['last_7_days']['soft_bounces']?>)
+						</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_7_days']['rejects']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_7_days']['complaints']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_7_days']['unsubs']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_7_days']['opens']?> / <?php echo $this->mandrillInfo['stats']['last_7_days']['unique_opens']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_7_days']['clicks']?> / <?php echo $this->mandrillInfo['stats']['last_7_days']['unique_clicks']?></td>
+					</tr>
+					<tr>
+						<td>Last 30 days</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_30_days']['sent']?></td>
+						<td>
+							<?php echo ($this->mandrillInfo['stats']['last_30_days']['hard_bounces'] + $this->mandrillInfo['stats']['last_30_days']['soft_bounces'])?>
+							(<?php echo $this->mandrillInfo['stats']['last_30_days']['hard_bounces']?> / <?php echo $this->mandrillInfo['stats']['last_30_days']['soft_bounces']?>)
+						</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_30_days']['rejects']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_30_days']['complaints']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_30_days']['unsubs']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_30_days']['opens']?> / <?php echo $this->mandrillInfo['stats']['last_30_days']['unique_opens']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_30_days']['clicks']?> / <?php echo $this->mandrillInfo['stats']['last_30_days']['unique_clicks']?></td>
+					</tr>
+					<tr>
+						<td>Last 60 days</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_60_days']['sent']?></td>
+						<td>
+							<?php echo ($this->mandrillInfo['stats']['last_60_days']['hard_bounces'] + $this->mandrillInfo['stats']['last_60_days']['soft_bounces'])?>
+							(<?php echo $this->mandrillInfo['stats']['last_60_days']['hard_bounces']?> / <?php echo $this->mandrillInfo['stats']['last_60_days']['soft_bounces']?>)
+						</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_60_days']['rejects']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_60_days']['complaints']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_60_days']['unsubs']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_60_days']['opens']?> / <?php echo $this->mandrillInfo['stats']['last_60_days']['unique_opens']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_60_days']['clicks']?> / <?php echo $this->mandrillInfo['stats']['last_60_days']['unique_clicks']?></td>
+					</tr>
+					<tr>
+						<td>Last 90 days</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_90_days']['sent']?></td>
+						<td>
+							<?php echo ($this->mandrillInfo['stats']['last_90_days']['hard_bounces'] + $this->mandrillInfo['stats']['last_90_days']['soft_bounces'])?>
+							(<?php echo $this->mandrillInfo['stats']['last_90_days']['hard_bounces']?> / <?php echo $this->mandrillInfo['stats']['last_90_days']['soft_bounces']?>)
+						</td>
+						<td><?php echo $this->mandrillInfo['stats']['last_90_days']['rejects']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_90_days']['complaints']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_90_days']['unsubs']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_90_days']['opens']?> / <?php echo $this->mandrillInfo['stats']['last_90_days']['unique_opens']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['last_90_days']['clicks']?> / <?php echo $this->mandrillInfo['stats']['last_90_days']['unique_clicks']?></td>
+					</tr>
+					<tr>
+						<td>All time</td>
+						<td><?php echo $this->mandrillInfo['stats']['all_time']['sent']?></td>
+						<td>
+							<?php echo ($this->mandrillInfo['stats']['all_time']['hard_bounces'] + $this->mandrillInfo['stats']['all_time']['soft_bounces'])?>
+							(<?php echo $this->mandrillInfo['stats']['all_time']['hard_bounces']?> / <?php echo $this->mandrillInfo['stats']['all_time']['soft_bounces']?>)
+						</td>
+						<td><?php echo $this->mandrillInfo['stats']['all_time']['rejects']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['all_time']['complaints']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['all_time']['unsubs']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['all_time']['opens']?> / <?php echo $this->mandrillInfo['stats']['all_time']['unique_opens']?></td>
+						<td><?php echo $this->mandrillInfo['stats']['all_time']['clicks']?> / <?php echo $this->mandrillInfo['stats']['all_time']['unique_clicks']?></td>
+					</tr>
+				</tbody>
+			
+			</table>
+			
+		</div>
+		
+	</div>
+	
+</div>

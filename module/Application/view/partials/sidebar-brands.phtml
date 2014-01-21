@@ -1,0 +1,7 @@
+<ul>
+	<li><a href="<?php echo $this->url('brands/show', array('id' => $this->brand_id))?>" <?php if(!$this->submenu_active){?>class="active"<?php }?>><span class="glyphicon glyphicon-inbox"></span> Brand overview</a></li>
+	<li><a href="<?php echo $this->url('brands/campaigns', array('id' => $this->brand_id))?>" <?php if($this->submenu_active=='campaigns'){?>class="active"<?php }?>><span class="glyphicon glyphicon-list"></span> Campaigns list</a></li>
+	<li><a href="<?php echo $this->url('campaigns/add', array('brand_id' => $this->brand_id))?>" <?php if($this->submenu_active=='create_campaign'){?>class="active"<?php }?>><span class="glyphicon glyphicon-pencil"></span> Create new campaign</a></li>
+	<li><a href="<?php echo $this->url('brands/lists', array('id' => $this->brand_id))?>" <?php if($this->submenu_active=='lists'){?>class="active"<?php }?>><span class="glyphicon glyphicon-user"></span> Lists & subscribers</a></li>
+	<li><a href="<?php echo $this->url('brands/reports', array('id' => $this->brand_id))?>" <?php if($this->submenu_active=='reports'){?>class="active"<?php }?>><span class="glyphicon glyphicon-tasks"></span> Reports <span class="badge pull-right">42</span></a></li>
+</ul>

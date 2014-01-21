@@ -1,0 +1,45 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+ 
+<h1>Campaign report for "<?php echo $this->campaign->title?>" <?php echo $this->campaignStatus($this->campaign->status)?></h1>
+
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+  
+  <?php 
+  if($this->layout()->publicReport){
+	$baseUrl = 'public/report';
+  } else {
+	$baseUrl = 'campaigns/show';
+  }
+  ?>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li <?php if(!$this->active){?>class="active"<?php }?>><a href="<?php echo $this->url($baseUrl, array('id' => $this->campaign->id))?>">Overview</a></li>
+      <li class="dropdown <?php if($this->active=='activity'){?>active<?php }?>">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activity <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <!-- <li><a href="<?php echo $this->url($baseUrl.'/activity/sent', array('id' => $this->campaign->id))?>">Sent to</a></li>-->
+          <li><a href="<?php echo $this->url($baseUrl.'/activity/opened', array('id' => $this->campaign->id))?>">Opened</a></li>
+          <li><a href="<?php echo $this->url($baseUrl.'/activity/clicked', array('id' => $this->campaign->id))?>">Clicked</a></li>
+          <!-- <li><a href="#">Didn't open</a></li> -->
+          <li><a href="<?php echo $this->url($baseUrl.'/activity/bounced', array('id' => $this->campaign->id))?>">Bounced</a></li>
+          <li><a href="<?php echo $this->url($baseUrl.'/activity/unsubscribed', array('id' => $this->campaign->id))?>">Unsubscribed</a></li>
+          <li><a href="<?php echo $this->url($baseUrl.'/activity/complained', array('id' => $this->campaign->id))?>">Complained</a></li>
+        </ul>
+      </li>
+      <li <?php if($this->active=='links'){?>class="active"<?php }?>><a href="<?php echo $this->url($baseUrl.'/links', array('id' => $this->campaign->id))?>">Links</a></li>
+      <li <?php if($this->active=='demographics'){?>class="active"<?php }?>><a href="<?php echo $this->url($baseUrl.'/demographics', array('id' => $this->campaign->id))?>">Demographics</a></li>
+      <li <?php if($this->active=='os'){?>class="active"<?php }?>><a href="<?php echo $this->url($baseUrl.'/os', array('id' => $this->campaign->id))?>">OS / Clients</a></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>

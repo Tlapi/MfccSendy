@@ -3,5 +3,60 @@
 <?php
 $form = $this->form;
 $form->prepare();
-echo $this->form()->render($form);
+$form->setAttribute('class', 'form-horizontal');
 ?>
+
+<div class="row">
+	<div class="col-md-12">
+
+		<?php echo $this->form()->openTag($form);?>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('name')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('name')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('name'));?>
+			  		<span class="help-inline">Name of new brand</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('from_name')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('from_name')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('from_name'));?>
+			  		<span class="help-inline">E-mails sent will be delivered under this name</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('from_email')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('from_email')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('from_email'));?>
+			  		<span class="help-inline">E-mails sent will be delivered from this e-mail address</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('reply_to')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('reply_to')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('reply_to'));?>
+			  		<span class="help-inline">Reply-to e-mail address</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('locale')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formSelect($form->get('locale')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('locale'));?>
+			  		<span class="help-inline">Locale for this brand</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
+			   		<button type="submit" class="btn btn-primary"><i class="icon-ok"></i> <?php echo $form->get('submit')->getValue()?></button>
+			   		<a href="<?php echo $this->url('brands')?>" class="btn btn-link">Cancel</a>
+				</div>
+			</div>
+		<?php echo $this->form()->closeTag() ?>
+
+	</div>
+</div>

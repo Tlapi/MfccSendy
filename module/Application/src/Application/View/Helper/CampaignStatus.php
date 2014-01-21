@@ -29,7 +29,7 @@ class CampaignStatus extends AbstractHelper
 			4 => 'error',
         );
         $statuses_classes = array(
-			0 => '',
+			0 => 'label-default',
 			1 => 'label-info',
 			2 => 'label-warning',
 			3 => 'label-success',

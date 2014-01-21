@@ -1,0 +1,5 @@
+<h1><?php echo $this->translate('Unsubscribe')?></h1>
+
+<?php echo $this->FlashMessenger()->render()?>
+
+<a href="<?php echo $this->url('public/resubscribe', array('id' => $this->id))?>?confirm" class="btn"><?php echo $this->translate('Resubscribe')?></a>

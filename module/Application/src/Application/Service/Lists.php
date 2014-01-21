@@ -47,7 +47,11 @@ class Lists implements ServiceLocatorAwareInterface {
 			$this->getEntityManager()->persist($listToSubscriber);
 
 			$this->getEntityManager()->flush();
+			
+			return 'subscribed';
 		}
+		
+		return 'already subscribed';
 	}
 
 	/**
@@ -81,8 +85,15 @@ class Lists implements ServiceLocatorAwareInterface {
 		foreach($lines as $line){
 			$lineParts = explode(',', $line);
 			$subscriber = new \Application\Entity\Subscriber();
-			$subscriber->name = trim($lineParts[0]);
-			$subscriber->email = trim($lineParts[1]);
+			if($lineParts[0]){
+				// check if name is present
+				if(sizeof($lineParts)==1){
+					$subscriber->email = trim($lineParts[0]);
+				} else {
+					$subscriber->name = trim($lineParts[0]);
+					$subscriber->email = trim($lineParts[1]);
+				}
+			}
 			$this->addSubscriber($subscriber, $list);
 		}
 	}
@@ -96,9 +107,37 @@ class Lists implements ServiceLocatorAwareInterface {
 	{
 		$lines = explode("\n", $string);
 		foreach($lines as $line){
-			$this->removeSubscriberByEmail($line, $list);
+			$this->removeSubscriberByEmail(trim($line), $list);
 		}
 	}
+	
+	private function subscriberCountQuery($list,$status)
+	{	$actives = $this->getEntityManager()->createQuery("SELECT count(s)
+				FROM Application\Entity\Subscriber AS s
+				LEFT JOIN Application\Entity\ListsToSubscribers AS ls
+				WITH s.id = ls.subscriber
+				WHERE ls.list = ($list)
+				AND ls.status = $status
+				")->getResult();
+		return $actives[0][1];
+	}
+	
+	public function getActiveUsersCount($list)
+	{	return $this->subscriberCountQuery($list,'1');
+	}
+	
+	public function getBouncedUsersCount($list)
+	{	return $this->subscriberCountQuery($list,'3')+$this->subscriberCountQuery($list,'4');
+	}
+	
+	public function getUnsubscribedUsersCount($list)
+	{	return $this->subscriberCountQuery($list,'2');
+	}
+	
+	public function getComplainedUsersCount($list)
+	{	return $this->subscriberCountQuery($list,'5');
+	}
+	
 
 	/**
 	 * Interface methods

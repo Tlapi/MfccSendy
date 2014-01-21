@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Criteria;
 /**
  * A student
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="\Application\Repository\Lists")
  * @ORM\Table(name="lists")
  * @property integer $id
  */
@@ -29,10 +29,94 @@ class Lists
     protected $name;
 
     /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $sub_success_page;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $sub_confirmed_page;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $unsub_page;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true);
+     * @var boolean
+     */
+    protected $unsub_from_all;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true);
+     * @var boolean
+     */
+    protected $unsub_send;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true);
+     * @var boolean
+     */
+    protected $double_optin;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true);
+     * @var boolean
+     */
+    protected $thanks_send;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $thanks_subject;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $thanks_message;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $conf_subject;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $conf_message;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $unsub_subject;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true);
+     * @var string
+     */
+    protected $unsub_message;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\Brand", inversedBy="lists")
      * @ORM\JoinColumn(name="brand_id", referencedColumnName="id")
      */
     private $brand;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Application\Entity\Lists")
+     * @ORM\JoinColumn(name="merged_into", referencedColumnName="id")
+     */
+    private $merged_into_list;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -70,7 +154,7 @@ class Lists
     	$criteria = Criteria::create()->where(Criteria::expr()->eq("status", 1));
     	return $this->subsribers_connection->matching($criteria);
     }
-
+    
     /**
      * Gets collection of unsubscribed users
      */
@@ -126,5 +210,18 @@ class Lists
     public function exchangeArray($data)
     {
     	$this->name = (isset($data['name']))     ? $data['name']     : null;
+    	$this->double_optin = (isset($data['double_optin']))     ? $data['double_optin']     : null;
+    	$this->sub_success_page = (isset($data['sub_success_page']))     ? $data['sub_success_page']     : null;
+    	$this->sub_confirmed_page = (isset($data['sub_confirmed_page']))     ? $data['sub_confirmed_page']     : null;
+    	$this->unsub_from_all = (isset($data['unsub_from_all']))     ? $data['unsub_from_all']     : null;
+    	$this->unsub_page = (isset($data['unsub_page']))     ? $data['unsub_page']     : null;
+    	$this->thanks_send = (isset($data['thanks_send']))     ? $data['thanks_send']     : null;
+    	$this->thanks_subject = (isset($data['thanks_subject']))     ? $data['thanks_subject']     : null;
+    	$this->thanks_message = (isset($data['thanks_message']))     ? $data['thanks_message']     : null;
+    	$this->conf_subject = (isset($data['conf_subject']))     ? $data['conf_subject']     : null;
+    	$this->conf_message = (isset($data['conf_message']))     ? $data['conf_message']     : null;
+    	$this->unsub_send = (isset($data['unsub_send']))     ? $data['unsub_send']     : null;
+    	$this->unsub_subject = (isset($data['unsub_subject']))     ? $data['unsub_subject']     : null;
+    	$this->unsub_message = (isset($data['unsub_message']))     ? $data['unsub_message']     : null;
     }
 }

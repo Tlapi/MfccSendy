@@ -1,0 +1,41 @@
+<div id="dashboardStats">
+
+  			 	<!-- <a data-toggle="modal" href="#myModal" class="btn btn-danger" style="width: 100%"><span class="glyphicon glyphicon-exclamation-sign"></span> Emergency brake</a> -->
+
+  			 	<h1><span>Your</span> Mandrill account stats</h1>
+  			 	<div class="stats">
+  			 		<div class="box">
+  			 			<b><?php echo $this->printReputationNumber($this->mandrillInfo['reputation'])?></b>
+  			 			<strong>Reputation</strong>
+  			 		</div>
+  			 		<div class="box">
+  			 			<b><?php echo $this->formatStatNumber($this->mandrillInfo['backlog'], true)?></b>
+  			 			<strong>Backlog</strong>
+  			 		</div>
+  			 		<div class="box">
+  			 			<b><?php echo $this->formatStatNumber($this->mandrillInfo['hourly_quota'], true, 32, 4)?></b>
+  			 			<strong>Hourly quota</strong>
+  			 		</div>
+  			 		<div class="box">
+  			 			<b><?php echo $this->formatStatNumber($this->mandrillInfo['stats']['today']['sent'], true, 32, 4)?></b>
+  			 			<strong>Sent today</strong>
+  			 		</div>
+  			 	</div>
+  			 	<a href="<?php echo $this->url('home/stats')?>" class="btn btn-mg-primary">Full Mandrill statistics</a>
+
+  			 	<h1><span>Your</span> Sendgrid account stats</h1>
+
+  			 	<p>
+  			 		Sendgrid is not set up.
+				</p>
+
+  			 	<h1><span>Your</span> Amazon account stats</h1>
+  			 	<p>
+  			 		Amazon SES is not set up as we can't find your AWS credentials in settings.
+				</p>
+				<p>
+					If you entered SMTP credentials when you create or edit a brand, emails will be sent via SMTP. Otherwise, emails will be sent via your server (not recommended).
+  			 	</p>
+  			 	<a href="#" class="btn btn-mg-primary">View Get Started guide</a>
+
+</div>

@@ -1,56 +1,127 @@
 <h1>Campaign recipients</h1>
 
-<h2>Test send this campaign</h2>
+<div class="row">
+	<div class="col-md-4">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Test send this campaign</h2>
 
-<?php if($this->campaign->tests){?>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<td>Email</td>
-			<td>Opened</td>
-			<td>Clicked</td>
-		</tr>
-	</thead>
-	<tbody>
-		<?php foreach($this->campaign->tests as $testMail){?>
-		<tr rel="<?php echo $testMail->email?>">
-			<td><?php echo $testMail->email?></td>
-			<td class="open"><?php echo ($testMail->opened?'YES: '.$testMail->opened->format('Y-m-d H:i:s'):'NO')?></td>
-			<td class="click"><?php echo ($testMail->clicked?'YES: '.$testMail->clicked->format('Y-m-d H:i:s'):'NO')?></td>
-		</tr>
-		<?php }?>
-	</tbody>
-</table>
-<?php }?>
+				<?php if($this->campaign->tests){?>
+				<table class="table table-striped" <?php if(!sizeof($this->campaign->tests)){?>style="display: none"<?php }?>>
+					<thead>
+						<tr>
+							<td>Email</td>
+							<td>Opened</td>
+							<td>Clicked</td>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($this->campaign->tests as $testMail){?>
+						<tr rel="<?php echo $testMail->email?>">
+							<td><?php echo $testMail->email?></td>
+							<td class="open"><?php echo ($testMail->opened?'YES: '.$testMail->opened->format('Y-m-d H:i:s'):'NO')?></td>
+							<td class="click"><?php echo ($testMail->clicked?'YES: '.$testMail->clicked->format('Y-m-d H:i:s'):'NO')?></td>
+						</tr>
+						<?php }?>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="3">
+								Note that it can take several minutes before the opened and clicked events are logged.
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+				<?php }?>
 
-<!-- TODO move this form to class -->
-<form method="POST" accept-charset="utf-8" class="form-vertical" id="test-form">
-	<label class="control-label" for="test_email">Test email(s)</label>
-	<div class="control-group">
-		<div class="controls">
-			<input type="text" class="input-xlarge" id="test_email" name="test_email" placeholder="Email addresses, separated by comma">
+				<!-- TODO move this form to class -->
+				<form method="POST" accept-charset="utf-8" class="form-vertical" id="test-form">
+					<div class="form-group">
+						<input type="text" class="form-control" id="test_email" name="test_email" placeholder="Email addresses, separated by comma">
+					</div>
+
+					<button type="submit" class="btn btn-primary" id="test-send-btn"><i class="icon icon-envelope-alt"></i> Test send this newsletter</button>
+				</form>
+
+				<script>
+				$('#test-form').submit(function(){
+					if($('#test_email').val()==''){
+						alert('Empty field!');
+					} else {
+						$.post("<?php echo $this->url('campaigns/send-test', array('id' => $this->campaign->id))?>",{ test_email: $('#test_email').val() }, function(data) {
+							console.log(data);
+							if(data.success==true){
+								$('table').show();
+								$.each(data.emails, function(i, item) {
+									$('table tbody').append('<tr rel="' + item + '"><td>' + item + '</td><td class="open">NO</td><td class="click">NO</td></tr>')
+								});
+								$('#test_email').val('');
+							} else {
+								alert('Error!');
+							}
+						});
+					}
+					return false;
+				});
+				</script>
+				<br /><br />
+				<h2>Define recipients</h2>
+
+				<?php
+				$form = $this->form;
+				$form->prepare();
+				$form->setAttribute('class', 'form-horizontal');
+				?>
+				<?php echo $this->form()->openTag($form);?>
+
+						<?php echo $this->formSelect($form->get('recipients')->setAttribute('class', 'form-control')->setAttribute('multiple', 'multiple')->setAttribute('id', 'recipients'));?>
+						<p class="pull-right">Recipients: <span>0</span></p>
+						<p>Select lists you want to send campaign to</p>
+						<br /><br />
+						<button type="submit" class="btn btn-success btn-lg" disabled="disabled"><i class="icon-ok"></i> <?php echo $form->get('submit')->getValue()?></button>
+
+				<?php echo $this->form()->closeTag() ?>
+
+				<script>
+				$('#recipients').click(function(){
+					var countTarget = $(this).parent().find('p.pull-right span');
+					countTarget.text('calculating...');
+
+					$.post("<?php echo $this->url('campaigns/calculate-recipients')?>",{ lists: $('#recipients').val() }, function(data) {
+						console.log(data);
+						countTarget.text(data);
+						if(data==0){
+							$('button.btn-success').attr('disabled', 'disabled');
+						} else {
+							$('button.btn-success').removeAttr('disabled');
+						}
+
+					});
+					return false;
+				});
+				</script>
+			</div>
 		</div>
 	</div>
 
-	<button type="submit" class="btn" id="test-send-btn"><i class="icon icon-envelope-alt"></i> Test send this newsletter</button>
-</form>
+	<div class="col-md-8">
+		<h2>Campaign preview</h2>
 
-<h2>Define recipients</h2>
+		<blockquote><strong>From</strong> <span class="label"><?php echo $this->campaign->from_name?> &lt;<?php echo $this->campaign->from_email?>&gt;</span></blockquote>
+		<blockquote><strong>Subject</strong> <span class="label"><?php echo $this->campaign->subject?></span></blockquote>
 
-<?php
-$form = $this->form;
-$form->prepare();
-echo $this->form()->render($form);
-?>
+		<ul id="emulator" class="nav nav-tabs">
+			<li class="active"><a href="#" data-width="700">Desktop</a></li>
+			<li><a href="#" data-width="320">Mobile</a></li>
+		</ul>
+		
+		<br />
+		
+		<iframe src="<?php echo $this->url('campaigns/render', array('id' => $this->campaign->id))?>" width="700" height="800" frameborder="0" id="campaignPreviewEmulator" onLoad="autoresizeIframe()"></iframe>
 
-<b>Recipients: (//todo javascript counter)</b>
+	</div>
 
-<h2>Campaign preview</h2>
-
-<blockquote><strong>From</strong> <span class="label"><?php echo $this->campaign->from_name?> &lt;<?php echo $this->campaign->from_email?>&gt;</span></blockquote>
-<blockquote><strong>Subject</strong> <span class="label"><?php echo $this->campaign->subject?></span></blockquote>
-
-// todo show preview (iframe?)
+</div>
 
 <script src=http://cdn.pubnub.com/pubnub-3.5.3.1.min.js ></script>
 <script>(function(){
@@ -66,6 +137,18 @@ echo $this->form()->render($form);
         }
     });
 
-    
+    $('#emulator li a').click(function(){
+    	$('#emulator li').removeClass('active');
+    	$(this).parent().addClass('active');
+        $('#campaignPreviewEmulator').width($(this).data('width'));
+        autoresizeIframe();
+        return false;
+    });
 
-})();</script>
+})();
+
+function autoresizeIframe(){
+	$('#campaignPreviewEmulator').height((document.getElementById('campaignPreviewEmulator').contentWindow.document.body.scrollHeight));
+}
+
+</script>

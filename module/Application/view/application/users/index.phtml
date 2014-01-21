@@ -1,0 +1,75 @@
+<h1>Manage users</h1>
+
+<?php echo $this->FlashMessenger()->render()?>
+
+<div class="row">
+	<div class="col-md-12">
+
+		<div class="well">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>name</td>
+						<td>roles</td>
+						<td>edit</td>
+						<td>delete</td>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach($this->users as $user){?>
+				<tr>
+					<td>
+						<?php echo $user->getEmail()?>
+					</td>
+					<td>
+						<?php foreach($user->getRoles() as $role){?>
+							<?php echo $role->getRoleId()?>
+						<?php }?>
+					</td>
+					<td>
+						<a href="<?php echo $this->url('users/edit', array('id' => $user->getId()))?>"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
+					</td>
+					<td>
+						<a href="<?php echo $this->url('users/delete', array('id' => $user->getId()))?>"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+					</td>
+				</tr>
+				<?php }?>
+				</tbody>
+			</table>
+
+			<a href="<?php echo $this->url('users/add')?>" class="btn btn-primary">Add user</a>
+		</div>
+	</div>
+</div>
+
+<!--
+<h1>Manage roles</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<td>name</td>
+			<td>edit</td>
+			<td>delete</td>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach($this->roles as $role){?>
+	<tr>
+		<td>
+			<?php echo $role->getRoleId()?>
+		</td>
+		<td>
+			<a href="<?php echo $this->url('users/edit-role', array('id' => $role->getId()))?>">Edit</a>
+		</td>
+		<td>
+			<a href="<?php echo $this->url('users/delete-role', array('id' => $role->getId()))?>">Delete</a>
+		</td>
+	</tr>
+	<?php }?>
+	</tbody>
+</table>
+
+
+<a href="<?php echo $this->url('users/add-role')?>" class="btn btn-primary">Add role</a>
+-->

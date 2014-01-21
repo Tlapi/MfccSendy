@@ -1,0 +1,348 @@
+<?php echo $this->partial('application/campaigns/report-menu.phtml')?>
+
+<h3>Operating systems / Email clients</h3>
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>Operation systems</h2>
+		<div class="well">
+
+			<div class="row">
+				<div class="col-md-7">
+					<div id="systemsChart" class="chart"></div>
+				</div>
+				<div class="col-md-5">
+					<table class="table table-striped table-hover fill-head table-responsive chartleft">
+					  		<tbody>
+					  			<?php $t=0;foreach($this->os['list'] as $name => $family){ $t++;?>
+						  			<tr>
+						  				<td><b><a href="#" data-target="tar_<?php echo $t?>"><?php echo ($name?$name:'N/A')?></a></b></td>
+						  				<td><?php echo $family['count']?></td>
+						  				<td></td>
+						  			</tr>
+						  			<?php foreach($family['versions'] as $v_name => $v_props){?>
+							  			<tr class="sub tar_<?php echo $t?>">
+							  				<td><b><?php echo ($v_name?$v_name:'N/A')?></b></td>
+							  				<td><?php echo $v_props['count']?></td>
+							  				<td></td>
+							  			</tr>
+					  				<?php }?>
+					  			<?php }?>
+					  		</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>Clients</h2>
+		<div class="well">
+
+			<div class="row">
+				<div class="col-md-7">
+					<div id="clientsChart" class="chart"></div>
+				</div>
+				<div class="col-md-5">
+					<table class="table table-striped table-hover fill-head table-responsive chartleft">
+					  	<table class="table table-striped table-hover fill-head table-responsive chartleft">
+						  		<tbody>
+						  			<?php $t=0;foreach($this->clients['list'] as $name => $family){ $t++;?>
+							  			<tr>
+							  				<td><b><a href="#" data-target="tarc_<?php echo $t?>"><?php echo ($name?$name:'N/A')?></a></b></td>
+							  				<td><?php echo $family['count']?></td>
+							  				<td></td>
+							  			</tr>
+							  			<?php foreach($family['versions'] as $v_name => $v_props){?>
+								  			<tr class="sub tarc_<?php echo $t?>">
+								  				<td><b><?php echo ($v_name?$v_name:'N/A')?></b></td>
+								  				<td><?php echo $v_props['count']?></td>
+								  				<td></td>
+								  			</tr>
+						  				<?php }?>
+						  			<?php }?>
+						  		</tbody>
+						</table>
+					</table>
+					<?php if($i>=10){?>
+						<a href="#">show more</a>
+					<?php }?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php 
+// BUILD CHART DATA
+
+$browsersJson = array();
+$c = 0;
+$other = 0;
+$b_cats = array();
+foreach($this->os['list'] as $name => $family){
+	if($family['percent']<3){
+		if(!in_array("'Other'", $b_cats)){
+			$b_cats[] = "'Other'";
+		}
+	
+		$other += $family['percent'];
+	} else {
+		$json = "{y: ".$family['percent'].", color: colors[".$c."], drilldown: { name: 'Versions',";
+		$cats = array();
+		$data = array();
+		$other_v = 0;
+		foreach($family['versions'] as $version => $versionprops){
+			if($versionprops['percent'] < 1){
+				$other_v += $versionprops['percent'];
+			} else {
+				$cats[] = "'".$version."'";
+				$data[] = $versionprops['percent'];
+			}
+		}
+		if($other_v){
+			$cats[] = "'Other'";
+			$data[] = $other_v;
+		}
+		$json .= 'categories:['.join(',', $cats).'],';
+		$json .= 'data:['.join(',', $data).'],';
+		$json .= 'color: colors['.$c.']}}';
+		$browsersJson[] = $json;
+		$c++;
+	}
+}
+// add other
+if($other){
+	$json = "{y: ".$other.", color: colors[".$c."], drilldown: { name: 'Versionso',";
+	$cats = array("'Other'");
+	$data = array($other);
+	$json .= 'categories:['.join(',', $cats).'],';
+	$json .= 'data:['.join(',', $data).'],';
+	$json .= 'color: colors['.$c.']}}';
+	$browsersJson[] = $json;
+}
+
+$clientsJson = array();
+$c = 0;
+$other = 0;
+$c_cats = array();
+foreach($this->clients['list'] as $name => $family){
+
+	if($family['percent']<3){
+		if(!in_array("'Other'", $c_cats)){
+			$c_cats[] = "'Other'";
+		}
+		
+		$other += $family['percent'];
+	} else {
+		$c_cats[] = "'".$name."'";
+		$json = "{y: ".$family['percent'].", color: colors[".$c."], drilldown: { name: '".$name."',";
+		$cats = array();
+		$data = array();
+		$other_v = 0;
+		foreach($family['versions'] as $version => $versionprops){
+			if($versionprops['percent'] < 1){
+				$other_v += $versionprops['percent'];
+			} else {
+				$cats[] = "'".$version."'";
+				$data[] = $versionprops['percent'];
+			}
+		}
+		if($other_v){
+			$cats[] = "'Other'";
+			$data[] = $other_v;
+		}
+		$json .= 'categories:['.join(',', $cats).'],';
+		$json .= 'data:['.join(',', $data).'],';
+		$json .= 'color: colors['.$c.']}}';
+		$clientsJson[] = $json;
+		$c++;
+	}
+}
+// add other
+if($other){
+	$json = "{y: ".$other.", color: colors[".$c."], drilldown: { name: 'Versionso',";
+	$cats = array("'Other'");
+	$data = array($other);
+	$json .= 'categories:['.join(',', $cats).'],';
+	$json .= 'data:['.join(',', $data).'],';
+	$json .= 'color: colors['.$c.']}}';
+	$clientsJson[] = $json;
+}
+?> 
+
+<script>
+$(function () {
+
+	$('.chartleft a').click(function(){
+		$('.'+$(this).data('target')).toggle()
+		return false;
+	});
+
+	var colors = Highcharts.getOptions().colors,
+    categories = [<?php echo join(",", $this->os['cats'])?>],
+    name = 'Browser brands',
+    data = [<?php echo join(',', $browsersJson);?>];
+		
+		
+	// Build the data arrays
+	var browserData = [];
+	var versionsData = [];
+	for (var i = 0; i < data.length; i++) {
+	
+	    // add browser data
+	    browserData.push({
+	        name: categories[i],
+	        y: data[i].y,
+	        color: data[i].color
+	    });
+	
+	    // add version data
+	    for (var j = 0; j < data[i].drilldown.data.length; j++) {
+	        var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5 ;
+	        versionsData.push({
+	            name: data[i].drilldown.categories[j],
+	            y: data[i].drilldown.data[j],
+	            color: Highcharts.Color(data[i].color).brighten(brightness).get()
+	        });
+	    }
+	}
+
+	// Create the chart
+    $('#systemsChart').highcharts({
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        yAxis: {
+            title: {
+                text: 'Total percent market share'
+            }
+        },
+        plotOptions: {
+            pie: {
+                shadow: false,
+                center: ['50%', '50%']
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+    	    valueSuffix: '%'
+        },
+        series: [{
+            name: 'Browsers',
+            data: browserData,
+            size: '60%',
+            dataLabels: {
+                formatter: function() {
+                    return this.y > 4 ? this.point.name : null;
+                },
+                color: 'white',
+                distance: -30
+            }
+        }, {
+            name: 'Versions',
+            data: versionsData,
+            size: '80%',
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function() {
+                    // display only if larger than 1
+                	if(this.point.name=='')
+                    	this.point.name = 'Unknown';
+                    return this.y > 2 ? '<b>'+ this.point.name +':</b> '+ this.y +'%'  : null;
+                }
+            }
+        }]
+    });
+
+    // Clients chart
+    var colors = Highcharts.getOptions().colors,
+    categories = [<?php echo join(",", $c_cats)?>],
+    name = 'Mail clients',
+    data = [<?php echo join(',', $clientsJson);?>];
+		
+		
+	// Build the data arrays
+	var browserData = [];
+	var versionsData = [];
+	for (var i = 0; i < data.length; i++) {
+	
+	    // add browser data
+	    browserData.push({
+	        name: categories[i],
+	        y: data[i].y,
+	        color: data[i].color
+	    });
+	
+	    // add version data
+	    for (var j = 0; j < data[i].drilldown.data.length; j++) {
+	        var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5 ;
+	        versionsData.push({
+	            name: data[i].drilldown.categories[j],
+	            y: data[i].drilldown.data[j],
+	            color: Highcharts.Color(data[i].color).brighten(brightness).get()
+	        });
+	    }
+	}
+
+	// Create the chart
+    $('#clientsChart').highcharts({
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        yAxis: {
+            title: {
+                text: 'Total percent market share'
+            }
+        },
+        plotOptions: {
+            pie: {
+                shadow: false,
+                center: ['50%', '50%']
+            }
+        },
+        tooltip: {
+    	    valueSuffix: '%'
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Clients',
+            data: browserData,
+            size: '60%',
+            dataLabels: {
+                formatter: function() {
+                    return this.y > 5 ? this.point.name : null;
+                },
+                color: 'white',
+                distance: -30
+            }
+        }, {
+            name: 'Versions',
+            data: versionsData,
+            size: '80%',
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function() {
+                    // display only if larger than 1
+                    if(this.point.name=='')
+                    	this.point.name = 'Unknown';
+                    return this.y > 2 ? '<b>'+ this.point.name +':</b> '+ this.y +'%'  : null;
+                }
+            }
+        }]
+    });
+
+});
+</script>

@@ -1,0 +1,36 @@
+<?php echo $this->partial('application/campaigns/report-menu.phtml')?>
+
+<div class="row">
+	<div class="col-md-6">
+		<h3>Links activity</h3>
+		
+		<table class="<?php echo $this->filter?> table basetable">
+			<thead>
+				<tr>
+					<td>URL</td>
+					<td>Clicks</td>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->log as $row){?>
+				<tr>
+					<td><a href="<?php echo $row[0]->msg?>" target="_blank"><?php echo ((strlen($row[0]->msg) > 83) ? substr($row[0]->msg, 0, 80).'...' : $row[0]->msg)?></a></td>
+					<td><?php echo $row['total']?></td>
+				</tr>
+			<?php }?>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-md-6">
+		<h3>Clickmap</h3>
+		<iframe src="<?php echo $this->url('campaigns/render', array('id' => $this->campaign->id, 'clickmap' => true))?>" width="100%" height="800" frameborder="0" id="campaignPreviewEmulator" onLoad="autoresizeIframe()"></iframe>
+	</div>
+</div>
+
+<script>
+function autoresizeIframe(){
+	$('#campaignPreviewEmulator').height((document.getElementById('campaignPreviewEmulator').contentWindow.document.body.scrollHeight));
+}
+autoresizeIframe()
+
+</script>

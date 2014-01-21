@@ -21,6 +21,8 @@ class ListsToSubscribers extends EntityRepository
 	    $qb->select('p')
 	       ->andWhere('YEAR(p.subscribed_at) = :year')
 	       ->andWhere('MONTH(p.subscribed_at) = :month');
+	    
+	    
 
 	    if($list_id){
 	    	$qb->andWhere('p.list = :list_id');
@@ -36,8 +38,13 @@ class ListsToSubscribers extends EntityRepository
 
 			$qb->setParameter('year', $year)->setParameter('month', $month);
 
-			$stats['data'][] = count($qb->getQuery()->getResult());
-			$stats['print'][] = "'".$monthPrint." ".$yearPrint."'";
+			$total = $qb->select('COUNT(p)')
+               			->getQuery()
+               			->getSingleScalarResult();
+
+			$stats['data'][] = $total;
+			//$stats['print'][] = "'".$monthPrint." ".$yearPrint."'";
+			$stats['print'][] = "'".$monthPrint."'";
 		}
 
 		return $stats;
@@ -69,8 +76,12 @@ class ListsToSubscribers extends EntityRepository
 
 			$qb->setParameter('year', $year)->setParameter('month', $month);
 
-			$stats['data'][] = count($qb->getQuery()->getResult());
-			$stats['print'][] = "'".$monthPrint." ".$yearPrint."'";
+			$total = $qb->select('COUNT(p)')
+						->getQuery()
+						->getSingleScalarResult();
+			
+			$stats['data'][] = $total;
+			$stats['print'][] = "'".$monthPrint."'";
 		}
 
 		return $stats;
@@ -102,11 +113,14 @@ class ListsToSubscribers extends EntityRepository
 
 			$qb->setParameter('year', $year)->setParameter('month', $month);
 
-			$stats['data'][] = count($qb->getQuery()->getResult());
-			$stats['print'][] = "'".$monthPrint." ".$yearPrint."'";
+			$total = $qb->select('COUNT(p)')
+						->getQuery()
+						->getSingleScalarResult();
+			
+			$stats['data'][] = $total;
+			$stats['print'][] = "'".$monthPrint."'";
 		}
 
 		return $stats;
 	}
-
 }

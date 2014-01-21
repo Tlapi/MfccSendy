@@ -3,5 +3,189 @@
 <?php
 $form = $this->form;
 $form->prepare();
-echo $this->form()->render($form);
+$form->setAttribute('class', 'form-horizontal');
 ?>
+
+<div class="row">
+	<div class="col-md-12">
+
+		<?php echo $this->form()->openTag($form);?>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('name')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formInput($form->get('name')->setAttribute('class', 'form-control'));?>
+						<?php echo $this->formElementErrors($form->get('name'));?>
+				  		<span class="help-inline">Name of new list</span>
+				   	</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="well">
+					<h4>Opt-in settings</h4>
+					<div class="form-group">
+		   				<div class="col-sm-9 col-lg-10 controls">
+		   					<?php echo $this->formRadio($form->get('double_optin')->setLabelAttributes(array('class' => 'radio-inline')));?>
+		   					<?php echo $this->formElementErrors($form->get('double_optin'));?>
+		   				</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9 col-lg-10 controls">
+							<strong><?php echo $form->get('sub_success_page')->getOption('label')?></strong>
+							<?php echo $this->formInput($form->get('sub_success_page')->setAttribute('class', 'form-control'));?>
+							<?php echo $this->formElementErrors($form->get('sub_success_page'));?>
+					  		<span class="help-inline">Page user will be redirected to after successfull subscription</span>
+					   	</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9 col-lg-10 controls">
+							<strong><?php echo $form->get('sub_confirmed_page')->getOption('label')?></strong>
+							<?php echo $this->formInput($form->get('sub_confirmed_page')->setAttribute('class', 'form-control')->setAttribute('disabled', 'disabled'));?>
+							<?php echo $this->formElementErrors($form->get('sub_confirmed_page'));?>
+					  		<span class="help-inline">Page user will be redirected to after confirmed subscription</span>
+					   	</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="well">
+					<h4>Unsubscribe settings</h4>
+					<div class="form-group">
+		   				<div class="col-sm-9 col-lg-10 controls">
+		   					<?php echo $this->formRadio($form->get('unsub_from_all')->setLabelAttributes(array('class' => 'radio-inline')));?>
+		   					<?php echo $this->formElementErrors($form->get('unsub_from_all'));?>
+		   				</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9 col-lg-10 controls">
+							<strong><?php echo $form->get('unsub_page')->getOption('label')?></strong>
+							<?php echo $this->formInput($form->get('unsub_page')->setAttribute('class', 'form-control'));?>
+							<?php echo $this->formElementErrors($form->get('unsub_page'));?>
+					  		<span class="help-inline">Page user will be redirected to after unsubscribe</span>
+					   	</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12" style="clear: left">
+
+				<div class="well">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Confirmation message settings</h4>
+							<div class="form-group">
+				   				<div class="col-sm-9 col-lg-10 controls">
+				   					<div class="make-switch switch-small">
+				   						<?php echo $this->formCheckbox($form->get('thanks_send')->setLabelAttributes(array('class' => 'checkbox-inline')));?>
+				   					</div>
+				   					<strong><?php echo $form->get('thanks_send')->getOption('label')?></strong>
+				   					<?php echo $this->formElementErrors($form->get('thanks_send'));?>
+				   				</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<div class="col-sm-9 col-lg-10 controls">
+									<strong><?php echo $form->get('thanks_subject')->getOption('label')?></strong>
+									<?php echo $this->formInput($form->get('thanks_subject')->setAttribute('class', 'form-control'));?>
+									<?php echo $this->formElementErrors($form->get('thanks_subject'));?>
+							  		<span class="help-inline">Subject of message user will recieve after succesfull subscription</span>
+							   	</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-9 col-lg-10 controls">
+									<strong><?php echo $form->get('thanks_message')->getOption('label')?></strong>
+									<?php echo $this->formTextarea($form->get('thanks_message')->setAttribute('class', 'form-control'));?>
+									<?php echo $this->formElementErrors($form->get('thanks_message'));?>
+							  		<span class="help-inline">Content of message user will recieve after succesfull subscription</span>
+							   	</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<div class="col-sm-9 col-lg-10 controls">
+									<strong><?php echo $form->get('conf_subject')->getOption('label')?></strong>
+									<?php echo $this->formInput($form->get('conf_subject')->setAttribute('class', 'form-control')->setAttribute('disabled', 'disabled'));?>
+									<?php echo $this->formElementErrors($form->get('conf_subject'));?>
+							  		<span class="help-inline">Content of message user will recieve after subscription confirmation</span>
+							   	</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-9 col-lg-10 controls">
+									<strong><?php echo $form->get('conf_message')->getOption('label')?></strong>
+									<?php echo $this->formTextarea($form->get('conf_message')->setAttribute('class', 'form-control')->setAttribute('disabled', 'disabled'));?>
+									<?php echo $this->formElementErrors($form->get('conf_message'));?>
+							  		<span class="help-inline">Content of message user will recieve after subscription confirmation</span>
+							   	</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="well">
+					<div class="col-md-12">
+						<h4>Unsubscribe message settings</h4>
+						<div class="form-group">
+			   				<div class="col-sm-9 col-lg-10 controls">
+			   					<div class="make-switch switch-small">
+			   						<?php echo $this->formCheckbox($form->get('unsub_send')->setLabelAttributes(array('class' => 'checkbox-inline')));?>
+			   					</div>
+			   					<strong><?php echo $form->get('unsub_send')->getOption('label')?></strong>
+			   					<?php echo $this->formElementErrors($form->get('unsub_send'));?>
+			   				</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-9 col-lg-10 controls">
+								<strong><?php echo $form->get('unsub_subject')->getOption('label')?></strong>
+								<?php echo $this->formInput($form->get('unsub_subject')->setAttribute('class', 'form-control'));?>
+								<?php echo $this->formElementErrors($form->get('unsub_subject'));?>
+						  		<span class="help-inline">Subject of message user will recieve after succesfull subscription</span>
+						   	</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-9 col-lg-10 controls">
+								<strong><?php echo $form->get('unsub_message')->getOption('label')?></strong>
+								<?php echo $this->formTextarea($form->get('unsub_message')->setAttribute('class', 'form-control'));?>
+								<?php echo $this->formElementErrors($form->get('unsub_message'));?>
+						  		<span class="help-inline">Content of message user will recieve after succesfull subscription</span>
+						   	</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-9 col-lg-10">
+				   		<button type="submit" class="btn btn-primary"><i class="icon-ok"></i> <?php echo $form->get('submit')->getValue()?></button>
+				   		<!-- <a href="<?php echo $this->url('brands')?>" class="btn btn-link">Cancel</a> -->
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<?php echo $this->form()->closeTag() ?>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$('input[name="double_optin"]').click(function(){
+		if($(this).val()==1){
+			$('input[name="sub_confirmed_page"]').removeAttr('disabled');
+			$('input[name="conf_subject"]').removeAttr('disabled');
+			$('textarea[name="conf_message"]').removeAttr('disabled');
+		} else {
+			$('input[name="sub_confirmed_page"]').attr('disabled','disabled');
+			$('input[name="conf_subject"]').attr('disabled','disabled');
+			$('textarea[name="conf_message"]').attr('disabled','disabled');
+		}
+	});
+});
+</script>

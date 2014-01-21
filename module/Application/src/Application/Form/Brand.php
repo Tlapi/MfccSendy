@@ -52,6 +52,19 @@ class Brand extends Form
                 'type' => 'text',
             ),
         ));
+        
+        $this->add(array(
+            'name' => 'locale',
+            'options' => array(
+                'label' => 'Locale',
+            	'value_options' => array(
+            		'' => '-- select one',
+            		'cs_CZ' => 'Čeština',
+            		'en_US' => 'English',
+            	)
+            ),
+            'type' => 'Zend\Form\Element\Select',
+        ));
 
         $this->add(array(
             'name' => 'submit',

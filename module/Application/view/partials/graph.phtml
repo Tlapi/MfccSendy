@@ -11,7 +11,8 @@
 			chart: {
 				renderTo: '<?php echo $this->id;?>',
 				type: 'areaspline',
-				marginBottom: 25
+				marginBottom: 25,
+				backgroundColor: null
 			},
 			title: {
 				text: false
@@ -55,7 +56,7 @@
                 enabled: false
             },
 			series: [{
-                name: 'Subscribers',
+                name: '<?php echo ($this->name?$this->name:'Subscribers')?>',
                 data: [<?php echo join(',', $this->stats['data'])?>]
             }]
 		});

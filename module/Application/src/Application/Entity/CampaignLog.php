@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * A student
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="\Application\Repository\CampaignLog")
  * @ORM\Table(name="campaigns_log")
  * @property integer $id
  */
@@ -34,6 +34,12 @@ class CampaignLog
     protected $msg;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Subscriber", inversedBy="log")
+     * @ORM\JoinColumn(name="email", referencedColumnName="email")
+     */
+    //private $subscriber;
+    
+    /**
      * @ORM\Column(type="string");
      * @var string
      */
@@ -49,7 +55,7 @@ class CampaignLog
      * @ORM\ManyToOne(targetEntity="Application\Entity\Campaign", inversedBy="log")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id")
      */
-    private $campaign;
+    protected $campaign;
 
     /**
      * Magic getter to expose protected properties.
@@ -79,6 +85,10 @@ class CampaignLog
     public function __set($property, $value)
     {
     	$this->$property = $value;
+    }
+    
+    public function setEmail($email){
+    	$this->email = $email;
     }
 
     public function getArrayCopy()

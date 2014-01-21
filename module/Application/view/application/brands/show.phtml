@@ -1,113 +1,40 @@
-<h1>Show brand</h1>
+<h1><b><?php echo $this->brand->name?></b> overview</h1>
 
-<h2>Brand campaigns</h2>
+<div class="row">
+	<div class="col-md-12">
+		<div class="well">
 
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<td>ID</td>
-			<td>campaign title</td>
-			<td>recipients (at the time of sending)</td>
-			<td>sent</td>
-			<td>opens (total/unique)</td>
-			<td>clicks (total/unique)</td>
-			<td>duplicate</td>
-			<td>delete</td>
-		</tr>
-	</thead>
-	<tbody>
-	<?php foreach($this->brand->campaigns as $campaign){
-		if($campaign->status!=0) $stats = $this->campaignStats->getStats($campaign);
-	?>
-	<tr>
-		<td>
-			<?php echo $campaign->id?>
-		</td>
-		<td>
-			<?php echo $this->campaignStatus($campaign->status)?>
-			<a href="<?php echo ($campaign->status==0?$this->url('campaigns/send-to', array('id' => $campaign->id)):$this->url('campaigns/show', array('id' => $campaign->id)))?>"><?php echo $campaign->title?></a>
-			<?php if($campaign->status==0){?>
-				| <a href="#">Edit //todo</a>
-			<?php }?>
-		</td>
-		<td>
-			<?php echo ($campaign->status==0?'-':'')?>
-		</td>
-		<td>
-			<?php echo ($campaign->status==0?'-':$stats['info']['sent'])?>
-		</td>
-		<td>
-			<?php echo ($campaign->status==0?'-':$stats['info']['opens']." / ".$stats['info']['unique_opens'])?>
-		</td>
-		<td>
-			<?php echo ($campaign->status==0?'-':$stats['info']['clicks']." / ".$stats['info']['unique_clicks'])?>
-		</td>
-		<td>
-			<a href="<?php echo $this->url('campaigns/duplicate', array('id' => $campaign->id))?>">Duplicate</a>
-		</td>
-		<td>
-			<a href="<?php echo $this->url('campaigns/delete', array('id' => $campaign->id))?>">Delete</a>
-		</td>
-	</tr>
-	<?php }?>
-	</tbody>
-</table>
+			<h2>Brand campaigns</h2>
 
-<a href="<?php echo $this->url('campaigns/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Create &amp; send new campaign</a>
+			<?php if($this->FlashMessenger()->getMessages()){?><div class="alert alert-success"><?php echo $this->FlashMessenger()->render()?></div><?php }?>
 
-<h2>Brand lists</h2>
+			<!-- TODO this to partial -->
+			<?php echo $this->partial('partials/table-campaigns',array('brand'=>$this->brand, 'campaignStats'=>$this->campaignStats));?>
+			
+			<a href="<?php echo $this->url('brands/campaigns', array('id' => $this->brand->id))?>" class="btn btn-primary">Go to campaigns</a>
 
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<td>ID</td>
-			<td>list name</td>
-			<td>active</td>
-			<td>unsubscribed</td>
-			<td>bounced</td>
-			<td>complaints</td>
-			<td>edit</td>
-			<td>split</td>
-			<td>delete</td>
-		</tr>
-	</thead>
-	<tbody>
-	<?php foreach($this->brand->lists as $list){?>
-	<tr>
-		<td>
-			<?php echo $list->id?>
-		</td>
-		<td>
-			<a href="<?php echo $this->url('lists/show', array('id' => $list->id))?>"><?php echo $list->name?></a>
-		</td>
-		<td>
-			<?php echo count($list->getActiveUsers())?>
-		</td>
-		<td>
-			<?php echo count($list->getUnsubscribedUsers())?>
-		</td>
-		<td>
-			<?php echo count($list->getSoftBouncedUsers()) + count($list->getHardBouncedUsers())?>
-		</td>
-		<td>
-			<?php echo count($list->getComplainedUsers())?>
-		</td>
-		<td>
-			<a href="<?php echo $this->url('lists/edit', array('id' => $list->id))?>">Edit</a>
-		</td>
-		<td>
-			<a href="<?php echo $this->url('lists/edit', array('id' => $list->id))?>">Split (todo)</a>
-		</td>
-		<td>
-			<a href="<?php echo $this->url('lists/delete', array('id' => $list->id))?>">Delete</a>
-		</td>
-	</tr>
-	<?php }?>
-	</tbody>
-</table>
-
-<div class="pull-right">
-	<a href="<?php echo $this->url('lists/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Merge (todo)</a>
+		</div>
+	</div>
 </div>
 
-<a href="<?php echo $this->url('lists/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Add list</a>
+<div class="row">
+	<div class="col-md-12">
+		<div class="well">
+
+			<h2>Brand lists</h2>
+
+			<?php echo $this->partial('partials/table-lists',array('brand'=>$this->brand, 'listsService'=>$this->listsService));?>
+
+			<a href="<?php echo $this->url('brands/lists', array('id' => $this->brand->id))?>" class="btn btn-primary">Go to lists</a>
+
+			<!--
+			<div class="pull-right">
+				<a href="<?php echo $this->url('lists/merge', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Merge</a>
+			</div>
+
+			<a href="<?php echo $this->url('lists/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Add list</a>
+			 -->
+
+		</div>
+	</div>
+</div>

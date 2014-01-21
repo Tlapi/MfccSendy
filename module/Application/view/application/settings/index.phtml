@@ -1,1 +1,90 @@
 <h1>Settings</h1>
+
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('class', 'form-horizontal');
+?>
+
+<div class="row">
+	<div class="col-md-12">
+	
+		<?php if($this->FlashMessenger()->getMessages()){?><div class="alert alert-success"><?php echo $this->FlashMessenger()->render()?></div><?php }?>
+
+		<?php echo $this->form()->openTag($form);?>
+			<h2>Mandrill setup</h2>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('mandrill_api_key')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('mandrill_api_key')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('mandrill_api_key'));?>
+			  		<span class="help-inline">Your Mandrill api key</span>
+			   	</div>
+			</div>
+			
+			<h2>Sendgrid setup</h2>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('sendgird_api_user')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('sendgird_api_user')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('sendgird_api_user'));?>
+			  		<span class="help-inline">Your Sengrid api username</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('sendgird_api_key')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('sendgird_api_key')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('sendgird_api_key'));?>
+			  		<span class="help-inline">Your Sendgrid api key</span>
+			   	</div>
+			</div>
+			
+			<h2>Amazon setup</h2>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('amazon_api_key')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('amazon_api_key')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('amazon_api_key'));?>
+			  		<span class="help-inline">Your Amazon api key</span>
+			   	</div>
+			</div>
+			
+			<h2>PubNub setup</h2>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('pubnub_subscribe_key')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('pubnub_subscribe_key')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('pubnub_subscribe_key'));?>
+			  		<span class="help-inline">Your PubNub subscribe key</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('pubnub_publish_key')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('pubnub_publish_key')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('pubnub_publish_key'));?>
+			  		<span class="help-inline">Your PubNub publish key</span>
+			   	</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('pubnub_secret_key')->getOption('label')?></label>
+				<div class="col-sm-9 col-lg-10 controls">
+					<?php echo $this->formInput($form->get('pubnub_secret_key')->setAttribute('class', 'form-control'));?>
+					<?php echo $this->formElementErrors($form->get('pubnub_secret_key'));?>
+			  		<span class="help-inline">Your PubNub secret key</span>
+			   	</div>
+			</div>
+			
+			<br /><br />
+			
+			<div class="form-group">
+				<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
+			   		<button type="submit" class="btn btn-primary"><i class="icon-ok"></i> <?php echo $form->get('submit')->getValue()?></button>
+			   		<a href="<?php echo $this->url('brands')?>" class="btn btn-link">Cancel</a>
+				</div>
+			</div>
+		<?php echo $this->form()->closeTag() ?>
+
+	</div>
+</div>

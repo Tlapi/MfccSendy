@@ -44,6 +44,12 @@ class Brand
      * @var string
      */
     protected $reply_to;
+    
+    /**
+     * @ORM\Column(type="string");
+     * @var string
+     */
+    protected $locale;
 
     /**
      * @ORM\Column(type="string", nullable=true);
@@ -58,6 +64,7 @@ class Brand
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\Campaign", mappedBy="brand")
+     * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $campaigns;
 
@@ -83,6 +90,11 @@ class Brand
     	$this->$property = $value;
     }
 
+    public function getLastCampaignTimestamp()
+    {
+
+    }
+
     public function getArrayCopy()
     {
     	return get_object_vars($this);
@@ -94,5 +106,6 @@ class Brand
     	$this->from_name = (isset($data['from_name']))     ? $data['from_name']     : null;
     	$this->from_email = (isset($data['from_email']))     ? $data['from_email']     : null;
     	$this->reply_to = (isset($data['reply_to']))     ? $data['reply_to']     : null;
+    	$this->locale = (isset($data['locale']))     ? $data['locale']     : null;
     }
 }

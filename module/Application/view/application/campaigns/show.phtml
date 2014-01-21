@@ -1,152 +1,180 @@
-<script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA99QyIf2spNs00Nb5vrJUu0KMTo-k4_vw&sensor=false">
-</script>
+<?php echo $this->partial('application/campaigns/report-menu.phtml')?>
 
-<div class="well">
-	Note: this is demo report for campaign with tag: <strong>pardal</strong>
+<div class="well reputation">
+	<div class="row">
+		<div class="col-md-2">
+			<h3><?php echo $this->stats['info']['reputation']?></h3>
+			<b>Campaign Reputation</b>
+		</div>
+		<div class="col-md-10">
+			<h3><a href="#"><?php echo number_format($this->campaign->recipients, 0, '', ' ')?></a> recipients</h3>
+		</div>
+	</div>
 </div>
 
-<div class="well">
-	TODO: share capmaign (CM), View (CM)
+<div class="row baseinfo">
+	<div class="col-md-6">
+		<ul> 
+			<li>
+				<b>Lists</b>
+				<span>
+					<?php 
+					$lists = array(); 
+					foreach($this->campaignLists as $list){
+						$lists[] = '<a href="">'.$list->name.'</a>';
+					}
+					echo join(', ', $lists);
+					?>
+				</span>
+			</li>
+			<li><b>Subject</b><span><?php echo $this->campaign->subject?></span></li>
+		</ul>
+	</div>
+	<div class="col-md-6">
+		<ul>
+			<li><b>Delivered</b><span><?php echo $this->campaign->changed_at->format('d.m.Y G:i')?></span></li>
+			<li>
+				<a href="<?php echo $this->url('campaigns/render', array('id' => $this->campaign->id))?>" target="_blank">View Email</a>
+				· <a href="<?php echo $this->url('campaigns/render-pdf', array('id' => $this->campaign->id))?>">Download</a>
+				· <a href="#">Print</a>
+			 	· <a href="<?php echo $this->url('campaigns/show/share', array('id' => $this->campaign->id))?>">Share</a>
+			</li>
+		</ul>
+	</div>
 </div>
 
-<h1>Campaign report <?php echo $this->campaignStatus($this->campaign->status)?></h1>
-
-Sent to <span class="label"><?php echo $this->stats['info']['sent']?> subscribers</span>
-<br />
-Reputation for this campaign: <?php echo $this->stats['info']['reputation']?>
-
-<br /><br />
-
-<div class="well">
-	<span class="label"><?php echo $this->stats['info']['opens']?></span> opened (<?php echo $this->stats['info']['unique_opens']?> unique)
-	<br /><br />
-	<span class="label"><?php echo $this->stats['info']['sent'] - $this->stats['info']['unique_opens']?></span> not opened
-	<br /><br />
-	<span class="label"><?php echo $this->stats['info']['clicks']?></span> clicked a link (<?php echo $this->stats['info']['unique_clicks']?> unique)
-	<br /><br />
-	<span class="label"></span> unsubscribed (TODO)
-	<br /><br />
-	<span class="label"><?php echo $this->stats['info']['hard_bounces'] + $this->stats['info']['soft_bounces']?></span> bounced (<?php echo $this->stats['info']['hard_bounces']?> hard, <?php echo $this->stats['info']['soft_bounces']?> soft)
-	<br /><br />
-	<span class="label"><?php echo $this->stats['info']['complaints']?></span> marked as spam
+<div class="row baserates">
+	<div class="col-md-6">
+		<h3 class="pull-left">Open rate</h3>
+		<h3 class="pull-right"><a href="<?php echo $this->url('campaigns/show/activity/opened', array('id' => $this->campaign->id))?>"><?php echo round(($this->stats['info']['unique_opens']/$this->campaign->recipients)*100, 2)?>%</a></h3>
+		<div class="progress">
+		  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo (round(($this->stats['info']['unique_opens']/$this->campaign->recipients)*100, 2)<1?1:round(($this->stats['info']['unique_opens']/$this->campaign->recipients)*100, 2))?>%;">
+		    <span class="sr-only"><?php echo round($this->stats['info']['unique_opens']/$this->campaign->recipients, 2)?>%</span>
+		  </div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<h3 class="pull-left">Click rate</h3>
+		<h3 class="pull-right"><a href="<?php echo $this->url('campaigns/show/activity/clicked', array('id' => $this->campaign->id))?>"><?php echo round(($this->stats['info']['unique_clicks']/$this->campaign->recipients)*100, 2)?>%</a></h3>
+		<div class="progress">
+		  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo (round(($this->stats['info']['unique_clicks']/$this->campaign->recipients)*100, 2)<1?1:round(($this->stats['info']['unique_clicks']/$this->campaign->recipients)*100, 2))?>%;">
+		    <span class="sr-only"><?php echo round($this->stats['info']['unique_clicks']/$this->campaign->recipients, 2)?>%</span>
+		  </div>
+		</div>
+	</div>
 </div>
 
-<br /><br />
+<div class="well basestats">
+	<div class="row">
+		<div class="col-md-3">
+			<h3><a href="<?php echo $this->url('campaigns/show/activity/opened', array('id' => $this->campaign->id))?>"><?php echo number_format($this->stats['info']['unique_opens'], 0, '', ' ')?></a></h3>
+			<strong>Opened</strong>
+		</div>
+		<div class="col-md-3">
+			<h3><a href="<?php echo $this->url('campaigns/show/activity/clicked', array('id' => $this->campaign->id))?>"><?php echo number_format($this->stats['info']['unique_clicks'], 0, '', ' ')?></a></h3>
+			<strong>Clicked</strong>
+		</div>
+		<div class="col-md-3">
+			<h3><a href="<?php echo $this->url('campaigns/show/activity/bounced', array('id' => $this->campaign->id))?>"><?php echo number_format($this->stats['info']['hard_bounces'] + $this->stats['info']['soft_bounces'], 0, '', ' ')?></a></h3>
+			<strong>Bounced</strong>
+		</div>
+		<div class="col-md-3">
+			<h3><a href="<?php echo $this->url('campaigns/show/activity/unsubscribed', array('id' => $this->campaign->id))?>"><?php echo number_format($this->unsubCount, 0, '', ' ')?></a></h3>
+			<strong>Unsubscribed</strong>
+		</div>
+	</div>
+</div>
 
-<h4>Link activity</h4>
+<div class="row detailstats">
+	<div class="col-md-6">
+		<ul>
+			<li>
+				<span class="pull-left">Successful deliveries</span>
+				<span class="pull-right"><b><?php echo number_format($this->campaign->recipients - $this->stats['info']['hard_bounces'] - $this->stats['info']['soft_bounces'], 0, '', ' ')?></b>&nbsp;&nbsp;&nbsp;<?php echo round((($this->campaign->recipients - $this->stats['info']['hard_bounces'] - $this->stats['info']['soft_bounces'])/$this->campaign->recipients)*100, 2)?>%</span>
+			</li>
+			<li>
+				<span class="pull-left">Total opens</span>
+				<span class="pull-right"><a href="<?php echo $this->url('campaigns/show/activity/opened', array('id' => $this->campaign->id))?>"><?php echo number_format($this->stats['info']['opens'], 0, '', ' ')?></a></span>
+			</li>
+			<li>
+				<span class="pull-left">Last opened</span>
+				<span class="pull-right"><abbr title="<?php echo $this->lastOpened->email?>"><?php echo ($this->lastOpened?$this->lastOpened->occured_at->format('d/m/y H:i'):'N/A')?></abbr></span>
+			</li>
+			<li>
+				<span class="pull-left">Avg opens per user</span>
+				<span class="pull-right"><?php echo round($this->stats['info']['opens']/$this->stats['info']['unique_opens'], 2)?></span>
+			</li>
+		</ul>
+	</div>
+	<div class="col-md-6">
+		<ul>
+			<li>
+				<span class="pull-left">Clicks per unique opens</span>
+				<span class="pull-right"><?php echo round($this->stats['info']['unique_clicks']/$this->stats['info']['unique_opens'], 2)?></span>
+			</li>
+			<li>
+				<span class="pull-left">Total clicks</span>
+				<span class="pull-right"><a href="<?php echo $this->url('campaigns/show/activity/clicked', array('id' => $this->campaign->id))?>"><?php echo number_format($this->stats['info']['clicks'], 0, '', ' ')?></a></span>
+			</li>
+			<li>
+				<span class="pull-left">Last clicked</span>
+				<span class="pull-right"><?php echo ($this->lastClicked?$this->lastClicked->occured_at->format('d/m/y H:i'):'N/A')?></span>
+			</li>
+			<li>
+				<span class="pull-left">Spam complaints</span>
+				<span class="pull-right"><a href="<?php echo $this->url('campaigns/show/activity/complained', array('id' => $this->campaign->id))?>"><?php echo $this->stats['info']['complaints']?></a></span>
+			</li>
+		</ul>
+	</div>
+</div>
 
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->getLastClicked() as $row){?>
-  			<tr>
-  				<td><b><?php echo $row->email?></b></td>
-  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
-  			</tr>
-  			<?php }?>
-  		</tbody>
-</table>
+<div class="row">
+	<div class="col-md-12">
+		<h3>24-hour performance</h3>
+		<div class="well" id="lastDayPerformance">
+			well
+		</div>
+	</div>
+</div>
 
-<h4>Last 10 opened</h4>
+<div class="row">
+	<div class="col-md-6">
+		<h3>Top links clicked</h3>
+		<table class="table basetable">
+		<?php foreach($this->topClicked as $link){?>
+			<tr>
+				<td>
+					<a href="<?php echo $link[0]->msg?>">
+						<?php echo ((strlen($link[0]->msg) > 83) ? substr($link[0]->msg, 0, 80).'...' : $link[0]->msg)?>
+					</a>
+				</td>
+				<td><?php echo $link['mycount']?></td>
+			</tr>
+		<?php }?>
+		</table>
+	</div>
+	<div class="col-md-6">
+		<h3>Subscribers with most opens</h3>
+		<table class="table basetable subscribers">
+		<?php foreach($this->mostOpens as $open){?>
+			<tr>
+				<td><a href="<?php echo $this->url('subscribers/show', array('email' => $open[0]->email))?>"><?php echo $open[0]->email?></a></td>
+				<td><?php echo $open['mycount']?></td>
+			</tr>
+		<?php }?>
+		</table>
+	</div>
+</div>
 
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->getLastOpened() as $row){?>
-  			<tr>
-  				<td><b><?php echo $row->email?></b></td>
-  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
-  			</tr>
-  			<?php }?>
-  		</tbody>
-</table>
 
-<h4>Last 10 unsubscribed (todo)</h4>
-
-<h4>Last 10 bounced</h4>
-
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->getLastBounced() as $row){?>
-  			<tr>
-  				<td><b><?php echo $row->email?></b></td>
-  				<td><b><?php echo $row->event?></b></td>
-  				<td><b><?php echo $row->msg?></b></td>
-  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
-  			</tr>
-  			<?php }?>
-  		</tbody>
-</table>
-
-<h4>Last 10 marked as spam</h4>
-
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->getLastSpam() as $row){?>
-  			<tr>
-  				<td><b><?php echo $row->email?></b></td>
-  				<td><?php echo $row->occured_at->format('Y-m-d H:m:s')?></td>
-  			</tr>
-  			<?php }?>
-  		</tbody>
-</table>
-
-<h4>Live map</h4>
-
-<div id="map-canvas" style="width: 100%; height: 600px"></div>
-
-<h4>Countries /pie+table</h4>
-
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->location as $country => $regions){?>
-  				<?php foreach($regions as $region => $counter){?>
-	  			<tr>
-	  				<td><b><?php echo $country?></b></td>
-	  				<td><?php echo $region?></td>
-	  				<td><?php echo $counter?></td>
-	  			</tr>
-  				<?php }?>
-  			<?php }?>
-  		</tbody>
-</table>
-
-<h4>Operation systems /pie+table</h4>
-
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->os as $family => $names){?>
-  				<?php foreach($names as $name => $counter){?>
-	  			<tr>
-	  				<td><b><?php echo $family?></b></td>
-	  				<td><?php echo $name?></td>
-	  				<td><?php echo $counter?></td>
-	  			</tr>
-  				<?php }?>
-  			<?php }?>
-  		</tbody>
-</table>
-
-<h4>Clients /pie+table</h4>
-
-<table class="table">
-  		<tbody>
-  			<?php foreach($this->campaign->ua as $family => $versions){?>
-  				<?php foreach($versions as $version => $counter){?>
-	  			<tr>
-	  				<td><b><?php echo $family?></b></td>
-	  				<td><?php echo $version?></td>
-	  				<td><?php echo $counter?></td>
-	  			</tr>
-  				<?php }?>
-  			<?php }?>
-  		</tbody>
-</table>
-
+<!--
 <h4>Mobile vs. Desktop /pie</h4>
+ -->
 
 <script src=http://cdn.pubnub.com/pubnub-3.5.3.1.min.js ></script>
 
 <script>
+/*
 $(document).ready(function () {
 var mapOptions = {
 		  center: new google.maps.LatLng(49.897, 16.144),
@@ -174,5 +202,112 @@ pubnub.subscribe({
  }
 });
 
-});
+});*/
 </script>
+
+<div id="ajax-modal" class="modal fade" tabindex="-1" style="display: none;"></div>
+
+<?php 
+// build chart
+$clicks = array();
+$opens = array();
+$cats = array();
+for($i=1;$i<=24;$i++){
+	$hour = intval(date('G', strtotime('-1 day', strtotime(date('Y-m-j G:i:s'))))) + $i;
+	if($hour>24){
+		$hour -= 24;
+	}
+	$cats[] = "'".$hour.":00'";
+	$clicks[$hour] = 0;
+	$opens[$hour] = 0;
+}
+
+foreach($this->lastDayClicks as $row){
+	if(isset($clicks[intval($row['hour'])]))
+		$clicks[intval($row['hour'])] = $row['total'];
+}
+foreach($this->lastDayOpens as $row){
+	if(isset($opens[intval($row['hour'])]))
+		$opens[intval($row['hour'])] = $row['total'];
+}
+
+?>
+
+<script type="text/javascript">
+
+$.fn.modal.defaults.spinner = $.fn.modalmanager.defaults.spinner = 
+    '<div class="loading-spinner" style="width: 200px; margin-left: -100px;">' +
+        '<div class="progress progress-striped active">' +
+            '<div class="progress-bar" style="width: 100%;"></div>' +
+        '</div>' +
+    '</div>';
+    
+var $modal = $('#ajax-modal');
+
+$('.subscribers a').on('click', function(){
+  // create the backdrop and wait for next modal to be triggered
+  $('body').modalmanager('loading');
+
+  var target = $(this).attr('href');
+
+  $modal.load(target, '', function(){
+      $modal.modal();
+  });
+  return false;
+});
+
+$modal.on('click', '.update', function(){
+  $modal.modal('loading');
+  setTimeout(function(){
+    $modal
+      .modal('loading')
+      .find('.modal-body')
+        .prepend('<div class="alert alert-info fade in">' +
+          'Updated!<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+        '</div>');
+  }, 1000);
+});
+
+$(function () {
+    $('#lastDayPerformance').highcharts({
+        title: {
+            text: '',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: [<?php echo join($cats, ', ')?>]
+        },
+        yAxis: {
+        	min: 0,
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        credits: {
+            enabled: false
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Clicks',
+            data: [<?php echo join($clicks, ', ')?>]
+        },
+        {
+            name: 'Opens',
+            data: [<?php echo join($opens, ', ')?>]
+        }]
+    });
+});
+</script> 

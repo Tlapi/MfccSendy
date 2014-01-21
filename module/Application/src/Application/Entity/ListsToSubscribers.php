@@ -56,6 +56,13 @@ class ListsToSubscribers
      * @var string
      */
     protected $last_activity_at;
+    
+    // for bulk update
+    /**
+     * @ORM\Column(type="integer");
+     * @var int
+     */
+    protected $list_id;
 
     /**
      * Constructor

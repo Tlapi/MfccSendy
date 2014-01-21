@@ -1,10 +1,126 @@
-<h1>Create new campaign</h1>
-
-(option to choose regular and A/B split)
-<br /><br />
-
 <?php
 $form = $this->form;
 $form->prepare();
-echo $this->form()->render($form);
+$form->setAttribute('class', 'form-horizontal');
 ?>
+<h1>Create new campaign</h1>
+
+<div class="row">
+	<div class="col-md-12">
+		<!--
+		<div class="well">
+			(option to choose regular and A/B split)
+		</div>
+		 -->
+
+		<?php echo $this->form()->openTag($form);?>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('title')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formInput($form->get('title')->setAttribute('class', 'form-control'));?>
+						<?php echo $this->formElementErrors($form->get('title'));?>
+				  		<span class="help-inline">Title of new campaign</span>
+				   	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('subject')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formInput($form->get('subject')->setAttribute('class', 'form-control'));?>
+						<?php echo $this->formElementErrors($form->get('subject'));?>
+				  		<span class="help-inline">Subject of new campaign e-mail</span>
+				   	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('from_name')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formInput($form->get('from_name')->setAttribute('class', 'form-control'));?>
+						<?php echo $this->formElementErrors($form->get('from_name'));?>
+				  		<span class="help-inline">E-mails of this campaign will be delivered from this name</span>
+				   	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('from_email')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formInput($form->get('from_email')->setAttribute('class', 'form-control'));?>
+						<?php echo $this->formElementErrors($form->get('from_email'));?>
+				  		<span class="help-inline">E-mails of this campaign will be delivered from this e-mail</span>
+				   	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('reply_to')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formInput($form->get('reply_to')->setAttribute('class', 'form-control'));?>
+						<?php echo $this->formElementErrors($form->get('reply_to'));?>
+				  		<span class="help-inline">User replys will be delivered to this address</span>
+				   	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('plain_text')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formTextarea($form->get('plain_text')->setAttribute('class', 'form-control')->setAttribute('rows', '5'));?>
+						<?php echo $this->formElementErrors($form->get('plain_text'));?>
+				   	</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
+				   		<button type="submit" class="btn btn-primary"><i class="icon-ok"></i> <?php echo $form->get('submit')->getValue()?></button>
+				   		<a href="<?php echo $this->url('brands')?>" class="btn btn-link">Cancel</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label"><?php echo $form->get('html_text')->getOption('label')?></label>
+					<div class="col-sm-9 col-lg-10 controls">
+						<?php echo $this->formTextarea($form->get('html_text')->setAttribute('class', 'form-control')->setAttribute('rows', '15'));?>
+						<?php echo $this->formElementErrors($form->get('html_text'));?>
+				   	</div>
+				</div>
+				<div class="col-sm-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
+					<p>Use the following tags in your subject, plain text or HTML code and they'll automatically be formatted when your campaign is sent. For web version and unsubscribe tags, you can style them with inline CSS.</p>
+					<br>
+					<div class="row">
+				    	<div class="col-md-6">
+					    	<h3>Essential tags (HTML only)</h3>
+					    	The following tags can only be used on the HTML version<br><br>
+					    	<p><strong>Webversion link: </strong><br><code class="sel">&lt;webversion&gt;View web version&lt;/webversion&gt;</code></p>
+					    	<p><strong>Unsubscribe link: </strong><br><code class="sel">&lt;unsubscribe&gt;Unsubscribe here&lt;/unsubscribe&gt;</code></p>
+					    	<br>
+					    	<h3>Essential tags</h3>
+					    	The following tags can be used on both Plain text or HTML version<br><br>
+					    	<p><strong>Webversion link: </strong><br><code class="sel">[webversion]</code></p>
+					    	<p><strong>Unsubscribe link: </strong><br><code class="sel">[unsubscribe]</code></p>
+					    	<br>
+				    	</div>
+				    	<div class="col-md-6">
+					    	<h3>Personalization tags</h3>
+					    	The following tags can be used on both Plain text or HTML version<br><br>
+					    	<p><strong>Name: </strong><br><code class="sel">[Name,fallback=]</code></p>
+					    	<p><strong>Email: </strong><br><code class="sel">[Email]</code></p>
+					    	<br>
+					    	<h3>Custom field tags</h3><br>
+					    	<p>You can also use custom fields to personalize your newsletter, eg. <code class="sel">[Country,fallback=anywhere in the world]</code>.</p>
+					    	<p>To manage or get a reference of tags from custom fields, go to any subscriber list. Then click 'Custom fields' button at the top right.</p>
+				    	</div>
+				    	<script type="text/javascript">
+						$(document).ready(function() {
+							$(".sel").click(function(){
+								$(this).selectText();
+							});
+						});
+						</script>
+			    	</div>
+			    </div>
+			</div>
+		</div>
+		<?php echo $this->form()->closeTag() ?>
+
+	</div>
+</div>
+<!--
+<h2>Create from template</h2>
+
+<iframe src="<?php echo $this->url('templates/show', array('id' => 1))?>" frameborder="0" width="600" height="800"></iframe>
+ -->

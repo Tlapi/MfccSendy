@@ -25,7 +25,19 @@ class CampaignTests
      * @ORM\Column(type="string");
      * @var string
      */
+    protected $mandrill_id;
+    
+    /**
+     * @ORM\Column(type="string");
+     * @var string
+     */
     protected $email;
+    
+    /**
+     * @ORM\Column(type="string");
+     * @var string
+     */
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime");

@@ -1,0 +1,15 @@
+<h1><b><?php echo $this->brand->name?></b> lists</h1>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="well">
+			<?php echo $this->partial('partials/table-lists',array('brand'=>$this->brand, 'listsService'=>$this->listsService));?>
+			<div class="pull-right">
+				<a href="<?php echo $this->url('lists/merge', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Merge lists</a>
+			</div>
+
+			<a href="<?php echo $this->url('lists/add', array('brand_id' => $this->brand->id))?>" class="btn btn-primary">Add a new list</a>
+
+		</div>
+	</div>
+</div>

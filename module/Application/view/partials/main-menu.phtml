@@ -1,0 +1,7 @@
+<ul id="topMenu">
+<?php foreach ($this->container as $page): ?>
+    <li <?= $page->isActive()? 'class="active"' : '' ?>>
+        <?= $this->navigation()->menu()->htmlify($page) ?>
+    </li>
+<?php endforeach; ?>
+</ul>

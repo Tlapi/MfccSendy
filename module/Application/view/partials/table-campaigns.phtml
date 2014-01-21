@@ -1,0 +1,52 @@
+<table class="table table-striped table-hover fill-head table-responsive campaigns">
+	<thead>
+		<tr>
+			<th class="id hidden-xs">#</th>
+			<th class="status"></th>
+			<th>campaign title</th>
+			<th class="hidden-xs">recipients</th>
+			<th class="hidden-xs">sent</th>
+			<th class="hidden-xs">opens (total/unique)</th>
+			<th class="hidden-xs">clicks (total/unique)</th>
+			<th class="duplicate"></th>
+			<th class="delete"></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach($this->brand->campaigns as $campaign){
+		if($campaign->status!=0 && $campaign->status!=1) $stats = $this->campaignStats->getStats($campaign);
+	?>
+	<tr>
+		<td class="hidden-xs">
+			<?php echo $campaign->id?>
+		</td>
+		<td class="status"><?php echo $this->campaignStatus($campaign->status)?></td>
+		<td>
+			<a href="<?php echo ($campaign->status==0?$this->url('campaigns/send-to', array('id' => $campaign->id)):$this->url('campaigns/show', array('id' => $campaign->id)))?>"><?php echo $campaign->title?></a>
+			<?php if($campaign->status==0){?>
+				| <a href="<?php echo $this->url('campaigns/edit', array('id' => $campaign->id))?>">Edit</a>
+			<?php }?>
+		</td>
+		<td class="hidden-xs">
+			<?php echo ($campaign->status==0 || $campaign->status==1?'-':$campaign->recipients)?>
+		</td>
+		<td class="hidden-xs">
+			<?php echo ($campaign->status==0 || $campaign->status==1?'-':$stats['info']['sent'])?>
+			<?php if($campaign->status==2){?> (<?php echo ceil($stats['info']['sent']/$campaign->recipients)?>%)<?php }?>
+		</td>
+		<td class="hidden-xs">
+			<?php echo ($campaign->status==0 || $campaign->status==1?'-':$stats['info']['opens']." / ".$stats['info']['unique_opens'])?>
+		</td>
+		<td class="hidden-xs">
+			<?php echo ($campaign->status==0 || $campaign->status==1?'-':$stats['info']['clicks']." / ".$stats['info']['unique_clicks'])?>
+		</td>
+		<td class="duplicate">
+			<a href="<?php echo $this->url('campaigns/duplicate', array('id' => $campaign->id))?>"><span class="glyphicon glyphicon-retweet"></span> Duplicate</a>
+		</td>
+		<td class="delete">
+			<a href="<?php echo $this->url('campaigns/delete', array('id' => $campaign->id))?>"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+		</td>
+	</tr>
+	<?php }?>
+	</tbody>
+</table>

@@ -1,13 +1,6 @@
 <script src="<?php echo $this->basePath()?>/js/highcharts/highcharts.js"></script>
 
-<h1>Show list</h1>
-
-<h2>List subscribers</h2>
-
-<a href="<?php echo $this->url('lists/show/add-subscribers', array('id' => $this->list->id))?>" class="btn">Add subscribers</a>
-<a href="<?php echo $this->url('lists/show/remove-subscribers', array('id' => $this->list->id))?>" class="btn">Delete subscribers</a>
-
-<br /><br />
+<?php echo $this->partial('application/lists/list-menu.phtml')?>
 
 <?php echo $this->partial('partials/graph', array('id' => 'totalYearStats', 'stats' => $this->totalYearStats, 'colors' => array("'#468847'", "'#B94A48'", "'#333333'")))?>
 
