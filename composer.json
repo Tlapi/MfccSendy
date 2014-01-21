@@ -14,10 +14,13 @@
 		"php" : ">=5.3.3",
 		"zf-commons/zfc-user-doctrine-orm" : ">=0.1.1",
 		"zf-commons/zfc-user" : ">=0.1.2",
+		"neoseeker/sendgridphp" : "dev-master",
 		"mandrill/mandrill" : ">=1.0.45",
 		"crunchy/crunchy-profile" : "master-dev",
 		"pubnub/pubnub" : "master-dev",
 		"beberlei/DoctrineExtensions" : ">=0.1",
-		"zendframework/zendframework" : ">2.2.0"
+		"zendframework/zendframework" : ">2.2.0",
+		"dompdf/dompdf": "dev-master",
+		"dino/dompdf-module": "dev-master"
 	}
 }

@@ -8,6 +8,7 @@ return array(
 	    'ZfcBase',
 	    'ZfcUser',
 	    'ZfcUserDoctrineORM',
+	    'DOMPDFModule',
 	    'BjyAuthorize',
 	    'SamUser'
     ),

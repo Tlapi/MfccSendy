@@ -30,7 +30,7 @@ $settings = array(
      *
      * Accepted values: boolean true or false
      */
-    'enable_registration' => true,
+    'enable_registration' => false,
 
     /**
      * Enable Username
@@ -153,7 +153,7 @@ $settings = array(
      * Accepted values: A valid route name within your application
      *
      */
-    //'login_redirect_route' => 'zfcuser',
+    'login_redirect_route' => 'home',
 
     /**
      * Logout Redirect Route
